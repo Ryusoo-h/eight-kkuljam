@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react';
 import styled from 'styled-components';
-import { MinusToken } from 'typescript';
 import { todayDataType } from '../types/dataType';
 import TimePicker from './TimePicker';
 

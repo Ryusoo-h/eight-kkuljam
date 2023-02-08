@@ -15,7 +15,7 @@ function App() {
 
   const [openModal, setOpenModal] = useState<boolean>(false);
   
-  const [monthlyData, setMonthlyData] = useState<todayDataType[]>([]);
+  // const [monthlyData, setMonthlyData] = useState<todayDataType[]>([]);
 
   const [todayData, setTodayData] = useState<todayDataType>({
     year: 2023,
