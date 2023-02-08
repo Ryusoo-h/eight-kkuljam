@@ -75,13 +75,6 @@ const TotalStateFormModal = ({openModal, setOpenModal, todayData, setTodayData}:
     const [hour, setHour] = useState(8);
     const [minute, setMinute] = useState(0);
 
-    const todayDataUpdate = () => {
-        setTodayData({...todayData, hour, minute});
-
-        // TODO todayData를 서버에 저장해야지
-        // 지금은 테스트를 위해 localstorage에 저장하쥬
-    }
-
     return (
         <ModalWrapper id="today-state-form-modal" className={openModal ? "" : "hidden"} ref={Modal}>
         <div className="modal-dark-space" onClick={() => {setOpenModal(false);}} />
@@ -90,7 +83,7 @@ const TotalStateFormModal = ({openModal, setOpenModal, todayData, setTodayData}:
                 <DateBox className='date'>{todayData.year}년 {todayData.month}월 {todayData.date}일</DateBox>
                 <TimePicker hour={hour} setHour={setHour} minute={minute} setMinute={setMinute} openModal={openModal} />
                 <CompleteButton className="basic-button" type="button" onClick={()=>{
-                    todayDataUpdate(); setOpenModal(false);
+                    setTodayData({...todayData, hour, minute}); setOpenModal(false);
                 }}>
                     기록 완료!
                 </CompleteButton>
