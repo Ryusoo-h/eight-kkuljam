@@ -63,13 +63,13 @@ const CloseButton = styled.button`
     transform: translateX(-50%);
 `;
 
-type TotalStateFormModalType = {
+type TodayStateFormModalType = {
     openModal: boolean;
     setOpenModal: (isOpen:boolean)=>void;
     todayData: todayDataType;
     setTodayData: (todayData:todayDataType)=>void;
 }
-const TotalStateFormModal = ({openModal, setOpenModal, todayData, setTodayData}:TotalStateFormModalType) => {
+const TodayStateFormModal = ({openModal, setOpenModal, todayData, setTodayData}:TodayStateFormModalType) => {
     const Modal = useRef<any>(null);
 
     const [hour, setHour] = useState(8);
@@ -94,4 +94,4 @@ const TotalStateFormModal = ({openModal, setOpenModal, todayData, setTodayData}:
     );
 }
 
-export default TotalStateFormModal;
+export default TodayStateFormModal;

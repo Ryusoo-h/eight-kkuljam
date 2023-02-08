@@ -2,14 +2,9 @@ import HeaderBox from './components/HeaderBox';
 import './App.css';
 import TodayState from './components/TodayState';
 import TotalState from './components/TotalState';
-import TotalStateFormModal from './components/TodayStateFormModal';
-import styled from 'styled-components';
+import TodayStateFormModal from './components/TodayStateFormModal';
 import { useEffect, useRef, useState } from 'react';
 import { todayDataType } from './types/dataType';
-
-const TodayStateFormButton = styled.button`
-  
-`;
 
 function App() {
   const todayDate = useRef('');
@@ -89,8 +84,8 @@ function App() {
     <div className="App">
       <HeaderBox />
       <TodayState todayData={todayData} />
-      <TodayStateFormButton className="basic-button" onClick={() => {setOpenModal(true);}}>오늘 수면시간 입력하기</TodayStateFormButton>
-      <TotalStateFormModal openModal={openModal} setOpenModal={setOpenModal} todayData={todayData} setTodayData={setTodayData} />
+      <button id='today-state-form-modal-button' className="basic-button" onClick={() => {setOpenModal(true);}}>오늘 수면시간 입력하기</button>
+      <TodayStateFormModal openModal={openModal} setOpenModal={setOpenModal} todayData={todayData} setTodayData={setTodayData} />
       <TotalState />
     </div>
   );
