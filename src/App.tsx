@@ -5,6 +5,16 @@ import TotalState from './components/TotalState';
 import TodayStateFormModal from './components/TodayStateFormModal';
 import { useEffect, useRef, useState } from 'react';
 import { todayDataType } from './types/dataType';
+import styled from 'styled-components';
+
+const TodayStateFormModalButton = styled.button`
+  &.done {
+    background-color: #f9d3d4;
+    &:hover {
+      background-color: #ffb5b5;
+    }
+  }
+`;
 
 function App() {
   const todayDate = useRef('');
@@ -12,13 +22,13 @@ function App() {
   
   // const [monthlyData, setMonthlyData] = useState<todayDataType[]>([]);
   
-  const initialHour = 24; // state를 바꿔주는 switch문에 걸리지 않도록 하기 위함
+  const initialHour = useRef<number>(24); // state를 바꿔주는 switch문에 걸리지 않도록 하기 위함
 
   const [todayData, setTodayData] = useState<todayDataType>({
     year: 0,
     month: 0,
     date: 0,
-    hour: initialHour,
+    hour: initialHour.current,
     minute: 0,
     state: 0
   });
@@ -48,7 +58,7 @@ function App() {
   },[todayData])
 
   useEffect(()=> { 
-    if (didMount.current && todayData.hour !==initialHour) {
+    if (didMount.current && todayData.hour !==initialHour.current) {
       console.log('시간입력 후 state 업데이트');
       switch(todayData.hour) {
         case 0:
@@ -78,14 +88,20 @@ function App() {
     }
   }, [todayData.hour, todayData.minute]);
 
-
-
   return (
     <div className="App">
       <HeaderBox />
       <TodayState todayData={todayData} />
-      <button id='today-state-form-modal-button' className="basic-button" onClick={() => {setOpenModal(true);}}>오늘 수면시간 입력하기</button>
-      <TodayStateFormModal openModal={openModal} setOpenModal={setOpenModal} todayData={todayData} setTodayData={setTodayData} />
+      {todayData.state === 0 ? (
+        <TodayStateFormModalButton className="basic-button" onClick={() => {setOpenModal(true);}}>
+          오늘 수면시간 입력하기
+        </TodayStateFormModalButton>
+      ) : (
+        <TodayStateFormModalButton className="basic-button done" onClick={() => {setOpenModal(true);}}>
+          오늘 수면시간 수정하기
+        </TodayStateFormModalButton>
+      )}
+      <TodayStateFormModal openModal={openModal} setOpenModal={setOpenModal} todayData={todayData} setTodayData={setTodayData} initialHour={initialHour} />
       <TotalState />
     </div>
   );

@@ -90,6 +90,7 @@ const TimePicker = ({hour, setHour, minute, setMinute, openModal}:TimePickerType
 
     useEffect(() => {
         HourDropdownList.current.scrollTo(0, hour*ScrollStep);
+        MinuteDropdownList.current.scrollTo(0, (minute/5)*ScrollStep);
     },[openModal])
 
     return (

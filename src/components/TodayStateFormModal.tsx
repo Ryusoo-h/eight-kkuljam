@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { todayDataType } from '../types/dataType';
 import TimePicker from './TimePicker';
@@ -68,12 +68,18 @@ type TodayStateFormModalType = {
     setOpenModal: (isOpen:boolean)=>void;
     todayData: todayDataType;
     setTodayData: (todayData:todayDataType)=>void;
+    initialHour: MutableRefObject<number>;
 }
-const TodayStateFormModal = ({openModal, setOpenModal, todayData, setTodayData}:TodayStateFormModalType) => {
+const TodayStateFormModal = ({openModal, setOpenModal, todayData, setTodayData, initialHour}:TodayStateFormModalType) => {
     const Modal = useRef<any>(null);
 
     const [hour, setHour] = useState(8);
     const [minute, setMinute] = useState(0);
+
+    useEffect(() => {
+        setHour((todayData.hour < initialHour.current) ? todayData.hour : hour);
+        setMinute(todayData.minute);
+    },[todayData])
 
     return (
         <ModalWrapper id="today-state-form-modal" className={openModal ? "" : "hidden"} ref={Modal}>
