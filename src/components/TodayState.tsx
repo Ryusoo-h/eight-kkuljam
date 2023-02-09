@@ -15,20 +15,8 @@ const TodayMessageBox = styled.div`
     margin: 0 auto 12px;
     padding: 6px 16px;
     border-radius: 8px;
-    position: relative;
     &::after {
-        content: '';
-        display: block;
-        box-sizing: border-box;
-        width: 18px;
-        height: 12px;
-        border-top: solid 12px #fff;
-        border-left: solid transparent 9px;
-        border-right: solid transparent 9px;
-        position: absolute;
-        bottom: -12px;
-        left: 50%;
-        transform: translateX(-50%);
+        border-top-color: #fff;
     }
 `;
 const KkuljamJellyImage = styled.img`
@@ -63,12 +51,12 @@ const TodayState = ({todayData}:TodayStateType) => {
         <TodayStateWrapper>
             {todayData.state === 0 ? (
                 // 오늘 수면시간 입력 전
-                <TodayMessageBox className="todayMessage">
+                <TodayMessageBox className="todayMessage speech-bubble">
                     좋은아침!!<br />오늘은 몇시간 잤어?!
                 </TodayMessageBox>
             ) : (
                 // 오늘 수면시간 입력 후
-                <TodayMessageBox className="todayMessage">
+                <TodayMessageBox className="todayMessage speech-bubble">
                     오늘 <span className="time-text" style={timeTextStyle}>
                         {todayData.hour}시간 {todayData.minute}분
                     </span> 잤어!!<br />{message.current[todayData.state]}

@@ -73,7 +73,26 @@ html, body, header, section, div, button {
   line-height: 36px;
   transition: 0.2s background ease-in-out;
 }
-
 .basic-button:hover {
   background-color: #9226d1;
+}
+
+.speech-bubble {
+  position: relative;
+}
+.speech-bubble::after {
+  content: '';
+  display: block;
+  box-sizing: border-box;
+  width: 18px;
+  height: 12px;
+  border-top: solid 12px #fff;
+  border-left: solid transparent 9px;
+  border-right: solid transparent 9px;
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
 }

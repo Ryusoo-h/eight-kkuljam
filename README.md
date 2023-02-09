@@ -27,6 +27,7 @@
 - aria 속성 추가하기
 - react 책 보면서 코드개선
 - 꿀잠젤리 클릭시 모션 추가?
+- 시간 보여줄때 0분이면 분 표시 없애기 ex) 8시 00분 => 8시
 
 ## 
 # Getting Started with Create React App
