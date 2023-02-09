@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 const TimePickerWrapper = styled.div`
@@ -65,7 +65,7 @@ type TimePickerType = {
 const TimePicker = ({hour, setHour, minute, setMinute, openModal}:TimePickerType) => {
     const HourDropdownList = useRef<any>(null);
     const MinuteDropdownList = useRef<any>(null);
-    const ScrollStep = useMemo(() => 36, []);
+    const ScrollStep = useRef(36);
 
     // TODO 음... 이렇게까지 인자가 늘어나는게 맞나..?
     const onWheel = useCallback(
@@ -77,7 +77,7 @@ const TimePicker = ({hour, setHour, minute, setMinute, openModal}:TimePickerType
             step:number
         ) => {
         const sign = Math.sign(direction);
-        dropdownList.current.scrollBy(0, sign*ScrollStep);
+        dropdownList.current.scrollBy(0, sign*ScrollStep.current);
 
         let newTime = time + (sign * step);
         if (newTime < 0) {
@@ -89,8 +89,8 @@ const TimePicker = ({hour, setHour, minute, setMinute, openModal}:TimePickerType
     },[]);
 
     useEffect(() => {
-        HourDropdownList.current.scrollTo(0, hour*ScrollStep);
-        MinuteDropdownList.current.scrollTo(0, (minute/5)*ScrollStep);
+        HourDropdownList.current.scrollTo(0, hour*ScrollStep.current);
+        MinuteDropdownList.current.scrollTo(0, (minute/5)*ScrollStep.current);
     },[openModal])
 
     return (
