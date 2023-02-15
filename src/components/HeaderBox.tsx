@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Outlet } from 'react-router-dom';
 
 const HeaderWrapper = styled.header`
     position: relative;
@@ -33,13 +34,18 @@ const HeaderBox = () => {
         console.log('modal을 만들어주세욧!');
     };
     return (
-        <HeaderWrapper className="header-wrapper">
-            <h1 style={{display: 'none'}}>에잇꿀쟘</h1>
-            <LogoImage src={`${process.env.PUBLIC_URL}/img/logo.svg`} alt="eight-kkuljam-logo" />
-            <InfoButton onClick={() => {OpenModal();}}>
-                <img src={`${process.env.PUBLIC_URL}/img/info.svg`} alt="ic-info" />
-            </InfoButton>
-        </HeaderWrapper>
+        <>
+            <HeaderWrapper className="header-wrapper">
+                <h1 style={{display: 'none'}}>에잇꿀쟘</h1>
+                <LogoImage src={`${process.env.PUBLIC_URL}/img/logo.svg`} alt="eight-kkuljam-logo" />
+                <InfoButton onClick={() => {OpenModal();}}>
+                    <img src={`${process.env.PUBLIC_URL}/img/info.svg`} alt="ic-info" />
+                </InfoButton>
+            </HeaderWrapper>
+            <main>
+                <Outlet />
+            </main>
+        </>
     );
 };
 

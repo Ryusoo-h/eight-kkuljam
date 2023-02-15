@@ -2,46 +2,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 import { stateType } from "../types/dataType"
 
-const TotalStateWrapper = styled.section`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  background-color: #fff;
-  border-radius: 8px 8px 0 0;
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 344px;
-  overflow: hidden;
-`;
-const TotalToggleButton = styled.button`
-  width: 100%;
-  background-color: #fff;
-  color: #333;
-  font-size: 20px;
-  &:hover {
-    background-color: #fff;
-    color: #000;
-  }
-  &::after {
-    content: '';
-    display: inline-block;
-    width: 12px;
-    height: 9px;
-    box-sizing: border-box;
-    border-bottom: solid 9px #333;
-    border-left: solid 6px transparent;
-    border-right: solid 6px transparent;
-    vertical-align: top;
-    margin: 14px 10px 0 10px;
-  }
-  &.opened::after {
-    border-bottom: none;
-    border-top: solid 9px #333;
-  }
-`;
-
 const MonthlyWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -228,7 +188,7 @@ type TotalStateType = {
   todayDate: string;
 }
 
-const TotalStatePage = ({openPage, setOpenPage, todayDate}:TotalStateType) => {
+const TotalStatePage = ({openPage, todayDate}:TotalStateType) => {
   type monthlyDataType = {
     date: number,
     hour: number,
@@ -310,13 +270,6 @@ const TotalStatePage = ({openPage, setOpenPage, todayDate}:TotalStateType) => {
     }
   },[monthlyData])
   return (
-    <TotalStateWrapper>
-      {openPage ? (
-        <TotalToggleButton className="basic-button opened" onClick={() => {setOpenPage(false);}}>수면시간 기록 닫아두기</TotalToggleButton>
-      ) : (
-        <TotalToggleButton className="basic-button" onClick={() => {setOpenPage(true);}}>수면시간 기록 전체보기</TotalToggleButton>
-      ) }
-      
       <MonthlyWrapper className={openPage ? "opened" : ""}>
         <EachMonthAverage className="speech-bubble">
           <PrevButton onClick={() => {}}/>
@@ -358,7 +311,6 @@ const TotalStatePage = ({openPage, setOpenPage, todayDate}:TotalStateType) => {
         )}
         <AddButton className="basic-button">기록 추가하기</AddButton>
       </MonthlyWrapper>
-    </TotalStateWrapper>
   );
 }
 
