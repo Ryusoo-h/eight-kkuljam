@@ -1,7 +1,7 @@
 import HeaderBox from './components/HeaderBox';
 import './App.css';
 import TodayState from './components/TodayState';
-import TotalState from './components/TotalState';
+import TotalStatePage from './components/TotalStatePage';
 import TodayStateFormModal from './components/TodayStateFormModal';
 import { useEffect, useRef, useState } from 'react';
 import { todayDataType } from './types/dataType';
@@ -17,8 +17,9 @@ const TodayStateFormModalButton = styled.button`
 `;
 
 function App() {
-  const todayDate = useRef('');
-  const [openModal, setOpenModal] = useState<boolean>(false);
+  const todayDate = useRef<string>('');
+  const [openTodayInsertModalModal, setOpentodayInsertModal] = useState<boolean>(false);
+  const [openTotalPage, setOpenTotalPage] = useState(false);
   
   // const [monthlyData, setMonthlyData] = useState<todayDataType[]>([]);
   
@@ -92,17 +93,18 @@ function App() {
     <div className="App">
       <HeaderBox />
       <TodayState todayData={todayData} />
+
       {todayData.state === 0 ? (
-        <TodayStateFormModalButton className="basic-button" onClick={() => {setOpenModal(true);}}>
+        <TodayStateFormModalButton className="basic-button" onClick={() => {setOpentodayInsertModal(true);}}>
           오늘 수면시간 입력하기
         </TodayStateFormModalButton>
       ) : (
-        <TodayStateFormModalButton className="basic-button done" onClick={() => {setOpenModal(true);}}>
+        <TodayStateFormModalButton className="basic-button done" onClick={() => {setOpentodayInsertModal(true);}}>
           오늘 수면시간 수정하기
         </TodayStateFormModalButton>
       )}
-      <TodayStateFormModal openModal={openModal} setOpenModal={setOpenModal} todayData={todayData} setTodayData={setTodayData} initialHour={initialHour} />
-      <TotalState />
+      <TotalStatePage openPage={openTotalPage} setOpenPage={setOpenTotalPage} todayDate={todayDate.current} />
+      <TodayStateFormModal openModal={openTodayInsertModalModal} setOpenModal={setOpentodayInsertModal} todayData={todayData} setTodayData={setTodayData} initialHour={initialHour} />
     </div>
   );
 }
