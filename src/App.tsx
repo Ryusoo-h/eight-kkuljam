@@ -9,11 +9,13 @@ import TotalStatePage from './page/TotalStatePage';
 function App() {
   const [openTotalPage, setOpenTotalPage] = useState<boolean>(false);
   const todayDate = useRef<string>('');
+  const standardDate = useRef<{year: number, month: number}>({year: 0, month: 0});
+
   return (
     <Routes>
       <Route element={<HeaderBox />}>
         <Route path="/" element={<Home todayDate={todayDate} openTotalPage={openTotalPage} setOpenTotalPage={setOpenTotalPage} />}>
-          <Route path="/totalState/:monthly" element={<TotalStatePage openPage={openTotalPage} setOpenPage={setOpenTotalPage} todayDate={todayDate.current} />} />
+          <Route path="/totalState/:monthly" element={<TotalStatePage openPage={openTotalPage} todayDate={todayDate.current} standardDate={standardDate} />} />
         </Route>
       </Route>
     </Routes>

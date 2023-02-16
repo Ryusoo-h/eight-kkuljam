@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { MutableRefObject, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { stateType } from "../types/dataType"
 
@@ -184,11 +184,11 @@ const AddButton = styled.button`
 
 type TotalStateType = {
   openPage: boolean;
-  setOpenPage: (isOpen:boolean)=>void;
   todayDate: string;
+  standardDate: MutableRefObject<{ year: number; month: number; }>
 }
 
-const TotalStatePage = ({openPage, todayDate}:TotalStateType) => {
+const TotalStatePage = ({openPage, todayDate, standardDate}:TotalStateType) => {
   type monthlyDataType = {
     date: number,
     hour: number,
@@ -200,7 +200,6 @@ const TotalStatePage = ({openPage, todayDate}:TotalStateType) => {
     state: stateType
   }
   const newState = useRef<stateType>(0);
-  const standardDate = useRef({year: 0, month: 0});
   standardDate.current = {year: parseInt(todayDate.slice(0, 4)), month: parseInt(todayDate.slice(6, 8))};
 
   const message = useRef({
