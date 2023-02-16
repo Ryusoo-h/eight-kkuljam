@@ -7,7 +7,7 @@ import TotalStatePage from './page/TotalStatePage';
 
 
 function App() {
-  const [openTotalPage, setOpenTotalPage] = useState(false);
+  const [openTotalPage, setOpenTotalPage] = useState<boolean>(false);
   const todayDate = useRef<string>('');
   return (
     <Routes>
@@ -17,7 +17,7 @@ function App() {
         </Route>
       </Route>
     </Routes>
-    
+
   );
 }
 
