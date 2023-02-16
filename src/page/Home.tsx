@@ -4,7 +4,6 @@ import TodayState from '../components/TodayState';
 import TodayStateFormModal from '../components/TodayStateFormModal';
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { todayDataType } from '../types/dataType';
-import TotalStatePage from './TotalStatePage';
 import { Outlet, useNavigate } from 'react-router-dom';
 
 
@@ -65,7 +64,7 @@ type homeType = {
 const Home = ({todayDate, openTotalPage, setOpenTotalPage}:homeType) => {
     const navigate = useNavigate();
 
-    const [openTodayInsertModalModal, setOpentodayInsertModal] = useState<boolean>(false);
+    const [openTodayInsertModal, setOpentodayInsertModal] = useState<boolean>(false);
     
     // const [monthlyData, setMonthlyData] = useState<todayDataType[]>([]);
     
@@ -153,11 +152,11 @@ const Home = ({todayDate, openTotalPage, setOpenTotalPage}:homeType) => {
                 {openTotalPage ? (
                     <TotalToggleButton className="basic-button opened" onClick={() => {setOpenTotalPage(false);}}>수면시간 기록 닫아두기</TotalToggleButton>
                 ) : (
-                    <TotalToggleButton className="basic-button" onClick={() => {setOpenTotalPage(true); navigate('/totalState/202302')}}>수면시간 기록 전체보기</TotalToggleButton>
+                    <TotalToggleButton className="basic-button" onClick={() => {setOpenTotalPage(true); navigate('/totalState/2023-02')}}>수면시간 기록 전체보기</TotalToggleButton>
                 )}
                 <Outlet />
             </TotalStateWrapper>
-            <TodayStateFormModal openModal={openTodayInsertModalModal} setOpenModal={setOpentodayInsertModal} todayData={todayData} setTodayData={setTodayData} initialHour={initialHour} />
+            <TodayStateFormModal openModal={openTodayInsertModal} setOpenModal={setOpentodayInsertModal} todayData={todayData} setTodayData={setTodayData} initialHour={initialHour} />
         </div>
     );
 }
