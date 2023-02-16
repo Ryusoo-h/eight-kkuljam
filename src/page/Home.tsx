@@ -1,7 +1,7 @@
 
 import styled from 'styled-components';
 import TodayState from '../components/TodayState';
-import TodayStateFormModal from '../components/TodayStateFormModal';
+import TodayStateInsertModal from '../components/TodayStateInsertModal';
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { todayDataType } from '../types/dataType';
 import { Outlet, useNavigate } from 'react-router-dom';
@@ -20,7 +20,7 @@ const TotalStateWrapper = styled.section`
     width: 344px;
     overflow: hidden;
 `;
-const TodayStateFormModalButton = styled.button`
+const TodayStateInsertModalButton = styled.button`
     &.done {
         background-color: #f9d3d4;
         &:hover {
@@ -139,13 +139,13 @@ const Home = ({todayDate, openTotalPage, setOpenTotalPage}:homeType) => {
             <TodayState todayData={todayData} />
 
             {todayData.state === 0 ? (
-                <TodayStateFormModalButton className="basic-button" onClick={() => {setOpentodayInsertModal(true); navigate('/total-state/2023-2');}}>
+                <TodayStateInsertModalButton className="basic-button" onClick={() => {setOpentodayInsertModal(true); navigate('/total-state/2023-2');}}>
                     오늘 수면시간 입력하기
-                </TodayStateFormModalButton>
+                </TodayStateInsertModalButton>
             ) : (
-                <TodayStateFormModalButton className="basic-button done" onClick={() => {setOpentodayInsertModal(true);}}>
+                <TodayStateInsertModalButton className="basic-button done" onClick={() => {setOpentodayInsertModal(true);}}>
                     오늘 수면시간 수정하기
-                </TodayStateFormModalButton>
+                </TodayStateInsertModalButton>
             )}
             
             <TotalStateWrapper>
@@ -156,7 +156,7 @@ const Home = ({todayDate, openTotalPage, setOpenTotalPage}:homeType) => {
                 )}
                 <Outlet />
             </TotalStateWrapper>
-            <TodayStateFormModal openModal={openTodayInsertModal} setOpenModal={setOpentodayInsertModal} todayData={todayData} setTodayData={setTodayData} initialHour={initialHour} />
+            <TodayStateInsertModal openModal={openTodayInsertModal} setOpenModal={setOpentodayInsertModal} todayData={todayData} setTodayData={setTodayData} initialHour={initialHour} />
         </div>
     );
 }
