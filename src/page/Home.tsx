@@ -139,7 +139,7 @@ const Home = ({todayDate, openTotalPage, setOpenTotalPage}:homeType) => {
             <TodayState todayData={todayData} />
 
             {todayData.state === 0 ? (
-                <TodayStateInsertModalButton className="basic-button" onClick={() => {setOpentodayInsertModal(true); navigate('/total-state/2023-2');}}>
+                <TodayStateInsertModalButton className="basic-button" onClick={() => {setOpentodayInsertModal(true);}}>
                     오늘 수면시간 입력하기
                 </TodayStateInsertModalButton>
             ) : (
