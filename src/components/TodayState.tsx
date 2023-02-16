@@ -58,7 +58,7 @@ const TodayState = ({todayData}:TodayStateType) => {
                 // 오늘 수면시간 입력 후
                 <TodayMessageBox className="todayMessage speech-bubble">
                     오늘 <span className="time-text" style={timeTextStyle}>
-                        {todayData.hour}시간 {todayData.minute}분
+                        {todayData.hour}시간 {todayData.minute === 0 ? '' : `${todayData.minute}분`}
                     </span> 잤어!!<br />{message.current[todayData.state]}
                 </TodayMessageBox>
             )}
