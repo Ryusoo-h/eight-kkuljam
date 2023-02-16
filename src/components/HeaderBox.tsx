@@ -30,15 +30,15 @@ const InfoButton = styled.button`
     }
 `;
 const HeaderBox = () => {
-    const OpenModal = () => {
-        console.log('modal을 만들어주세욧!');
+    const OpenInfoModal = () => {
+        console.log('info modal을 만들어주세욧!');
     };
     return (
         <>
             <HeaderWrapper className="header-wrapper">
                 <h1 style={{display: 'none'}}>에잇꿀쟘</h1>
                 <LogoImage src={`${process.env.PUBLIC_URL}/img/logo.svg`} alt="eight-kkuljam-logo" />
-                <InfoButton onClick={() => {OpenModal();}}>
+                <InfoButton onClick={() => {OpenInfoModal();}}>
                     <img src={`${process.env.PUBLIC_URL}/img/info.svg`} alt="ic-info" />
                 </InfoButton>
             </HeaderWrapper>
