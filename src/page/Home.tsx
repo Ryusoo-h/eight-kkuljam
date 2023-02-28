@@ -12,7 +12,7 @@ const TotalStateWrapper = styled.section`
     flex-direction: column;
     justify-content: center;
     background-color: #fff;
-    border-radius: 8px 8px 0 0;
+    border-radius: 13px 13px 0 0;
     position: absolute;
     bottom: 0;
     left: 50%;
@@ -33,6 +33,7 @@ const TotalToggleButton = styled.button`
     background-color: #fff;
     color: #333;
     font-size: 20px;
+    cursor: pointer;
     &:hover {
         background-color: #fff;
         color: #000;
@@ -52,6 +53,28 @@ const TotalToggleButton = styled.button`
     &.opened::after {
         border-bottom: none;
         border-top: solid 9px #333;
+    }
+`;
+const MonthlyWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    height: 0;
+    overflow: hidden;
+    transition: all 0.2s ease-out;
+    position: relative;
+    &.opened {
+        height: 380px;
+    }
+    &::after {
+        content: '';
+        display: block;
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 92%;
+        height: 2px;
+        background-color: #fff3e0;
     }
 `;
 
@@ -154,12 +177,14 @@ const Home = ({todayDate, openTotalPage, setOpenTotalPage, standardDate}:homeTyp
             )}
             
             <TotalStateWrapper>
+                <MonthlyWrapper className={openTotalPage ? "opened" : ""}>
+                    <Outlet />
+                </MonthlyWrapper>
                 {openTotalPage ? (
                     <TotalToggleButton className="basic-button opened" onClick={() => {setOpenTotalPage(false);  navigate('/');}}>수면시간 기록 닫아두기</TotalToggleButton>
                 ) : (
                     <TotalToggleButton className="basic-button" onClick={() => {setOpenTotalPage(true); navigateTotalStatePage();}}>수면시간 기록 전체보기</TotalToggleButton>
                 )}
-                <Outlet />
             </TotalStateWrapper>
             <TodayStateInsertModal openModal={openTodayInsertModal} setOpenModal={setOpentodayInsertModal} todayData={todayData} setTodayData={setTodayData} initialHour={initialHour} />
         </div>

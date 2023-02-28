@@ -2,24 +2,13 @@ import { MutableRefObject, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { stateType } from "../types/dataType"
 
-const MonthlyWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 0;
-  transition: all 0.2s ease-in-out;
-  &.opened {
-    height: 380px;
-  }
-`;
-
 const EachMonthAverage = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 0 8px;
+  margin: 8px 8px 4px;
   background-color: var(--state8-light);
   border-radius: 8px;
-  margin-bottom: 12px;
   font-size: 18px;
   & .time {
     font-family: 'CookieRun-Bold';
@@ -328,47 +317,47 @@ const TotalStatePage = ({openPage, todayDate, standardDate, setStandardDate}:Tot
   `;
   
   return (
-      <MonthlyWrapper className={openPage ? "opened" : ""}>
-        <EachMonthAverage style={{backgroundColor: `var(--state${averageTime.state}-light)`}}>
-          <PrevButton onClick={() => {onClickPrevButton()}} />
-          {standardDate.year}년 {standardDate.month}월 평균 <span className="time">{averageTime.hour}시간 {averageTime.minute === 0 ? "" : `${averageTime.minute}분`}</span>
-          <NextButton onClick={() => {onClickNextButton()}} />
-        </EachMonthAverage>
+    <>
+      <EachMonthAverage style={{backgroundColor: `var(--state${averageTime.state}-light)`}}>
+        <PrevButton onClick={() => {onClickPrevButton()}} />
+        {standardDate.year}년 {standardDate.month}월 평균 <span className="time">{averageTime.hour}시간 {averageTime.minute === 0 ? "" : `${averageTime.minute}분`}</span>
+        <NextButton onClick={() => {onClickNextButton()}} />
+      </EachMonthAverage>
 
-        {monthlyData.length === 0 ? (
-          <StateInfo className="undefined-monthly-data">
-            <StateDataBox>
-              <StateMessageBox>기록 없음..zZ</StateMessageBox>
-              <KkuljamJellyImage src={`${process.env.PUBLIC_URL}/img/kkuljamjelly/state0.svg`} alt={`state0`} />
-              {/* <KkuljamJellyImage src={`${process.env.PUBLIC_URL}/img/kkuljamjelly/state${todayData.state === 0 ? 8 : todayData.state}.svg`} alt={`state${todayData.state}`} /> */}
-            </StateDataBox>
-            <MonthlyDataBox></MonthlyDataBox>
-          </StateInfo>
-        ) : (
-          <StateInfo>
-            <StateDataBox>
-              <StateMessageBox>{message.current[averageTime.state === 0 ? 3 : averageTime.state]}</StateMessageBox>
-              <KkuljamJellyImage src={`${process.env.PUBLIC_URL}/img/kkuljamjelly/state${averageTime.state}.svg`} alt={`state${averageTime.state}`} />
-              {/* <KkuljamJellyImage src={`${process.env.PUBLIC_URL}/img/kkuljamjelly/state${todayData.state === 0 ? 8 : todayData.state}.svg`} alt={`state${todayData.state}`} /> */}
-            </StateDataBox>
-            <MonthlyDataBox>
-              {monthlyData.map((data) => {
-                return (
-                  <DailyData key={data.date}>
-                    <span className="date">{data.date}일</span>
-                    <span className="time">{data.hour}시간 {data.minute ! === 0 ? "00분" : `${data.minute}분`}</span>
-                    <div className="button-wrapper hidden">
-                      <button>수정</button>
-                      <button>삭제</button>
-                    </div>
-                  </DailyData>
-                )
-              })}
-            </MonthlyDataBox>
-          </StateInfo>
-        )}
-        <AddButton className="basic-button">기록 추가하기</AddButton>
-      </MonthlyWrapper>
+      {monthlyData.length === 0 ? (
+        <StateInfo className="undefined-monthly-data">
+          <StateDataBox>
+            <StateMessageBox>기록 없음..zZ</StateMessageBox>
+            <KkuljamJellyImage src={`${process.env.PUBLIC_URL}/img/kkuljamjelly/state0.svg`} alt={`state0`} />
+            {/* <KkuljamJellyImage src={`${process.env.PUBLIC_URL}/img/kkuljamjelly/state${todayData.state === 0 ? 8 : todayData.state}.svg`} alt={`state${todayData.state}`} /> */}
+          </StateDataBox>
+          <MonthlyDataBox></MonthlyDataBox>
+        </StateInfo>
+      ) : (
+        <StateInfo>
+          <StateDataBox>
+            <StateMessageBox>{message.current[averageTime.state === 0 ? 3 : averageTime.state]}</StateMessageBox>
+            <KkuljamJellyImage src={`${process.env.PUBLIC_URL}/img/kkuljamjelly/state${averageTime.state}.svg`} alt={`state${averageTime.state}`} />
+            {/* <KkuljamJellyImage src={`${process.env.PUBLIC_URL}/img/kkuljamjelly/state${todayData.state === 0 ? 8 : todayData.state}.svg`} alt={`state${todayData.state}`} /> */}
+          </StateDataBox>
+          <MonthlyDataBox>
+            {monthlyData.map((data) => {
+              return (
+                <DailyData key={data.date}>
+                  <span className="date">{data.date}일</span>
+                  <span className="time">{data.hour}시간 {data.minute ! === 0 ? "00분" : `${data.minute}분`}</span>
+                  <div className="button-wrapper hidden">
+                    <button>수정</button>
+                    <button>삭제</button>
+                  </div>
+                </DailyData>
+              )
+            })}
+          </MonthlyDataBox>
+        </StateInfo>
+      )}
+      <AddButton className="basic-button">기록 추가하기</AddButton>
+    </>
   );
 }
 
