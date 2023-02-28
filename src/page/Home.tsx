@@ -2,7 +2,7 @@
 import styled from 'styled-components';
 import TodayState from '../components/TodayState';
 import TodayStateInsertModal from '../components/TodayStateInsertModal';
-import { MutableRefObject, useEffect, useRef, useState } from 'react';
+import { MutableRefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { todayDataType } from '../types/dataType';
 import { Outlet, useNavigate } from 'react-router-dom';
 
@@ -59,9 +59,10 @@ type homeType = {
     todayDate: MutableRefObject<string>,
     openTotalPage: boolean,
     setOpenTotalPage: (isOpen:boolean)=>void;
+    standardDate: { year: number; month: number; }
 }
 
-const Home = ({todayDate, openTotalPage, setOpenTotalPage}:homeType) => {
+const Home = ({todayDate, openTotalPage, setOpenTotalPage, standardDate}:homeType) => {
     const navigate = useNavigate();
 
     const [openTodayInsertModal, setOpentodayInsertModal] = useState<boolean>(false);
@@ -134,6 +135,10 @@ const Home = ({todayDate, openTotalPage, setOpenTotalPage}:homeType) => {
         }
     }, [todayData.hour, todayData.minute]);
 
+    const navigateTotalStatePage = useCallback(() => {
+        navigate(`/totalState/${standardDate.year}-${standardDate.month}`);
+    },[standardDate]);
+
     return (
         <div className="App">
             <TodayState todayData={todayData} />
@@ -150,9 +155,9 @@ const Home = ({todayDate, openTotalPage, setOpenTotalPage}:homeType) => {
             
             <TotalStateWrapper>
                 {openTotalPage ? (
-                    <TotalToggleButton className="basic-button opened" onClick={() => {setOpenTotalPage(false);}}>수면시간 기록 닫아두기</TotalToggleButton>
+                    <TotalToggleButton className="basic-button opened" onClick={() => {setOpenTotalPage(false);  navigate('/');}}>수면시간 기록 닫아두기</TotalToggleButton>
                 ) : (
-                    <TotalToggleButton className="basic-button" onClick={() => {setOpenTotalPage(true); navigate('/totalState/2023-02')}}>수면시간 기록 전체보기</TotalToggleButton>
+                    <TotalToggleButton className="basic-button" onClick={() => {setOpenTotalPage(true); navigateTotalStatePage();}}>수면시간 기록 전체보기</TotalToggleButton>
                 )}
                 <Outlet />
             </TotalStateWrapper>

@@ -21,59 +21,8 @@ const EachMonthAverage = styled.div`
   border-radius: 8px;
   margin-bottom: 12px;
   font-size: 18px;
-  &::after {
-    border-top-color: var(--state8-light);
-    left: 25%;
-  }
   & .time {
     font-family: 'CookieRun-Bold';
-  }
-`;
-const PrevButton = styled.button`
-  border: none;
-  border-radius: 8px;
-  background-color: unset;
-  width: 40px;
-  height: 40px;
-  position: relative;
-  &::after {
-    content: '';
-    display: block;
-    box-sizing: border-box;
-    width: 14px;
-    height: 16px;
-    border-right: solid 14px var(--state8-light2);
-    border-top: solid 8px transparent;
-    border-bottom: solid 8px transparent;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%)
-  }
-`;
-const NextButton = styled.button`
-  border: none;
-  border-radius: 8px;
-  background-color: unset;
-  width: 40px;
-  height: 40px;
-  position: relative;
-  &.disabled {
-    opacity: 0.3;
-  }
-  &::after {
-    content: '';
-    display: block;
-    box-sizing: border-box;
-    width: 14px;
-    height: 16px;
-    border-left: solid 14px var(--state8-light2);
-    border-top: solid 8px transparent;
-    border-bottom: solid 8px transparent;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
   }
 `;
 
@@ -93,9 +42,9 @@ const StateInfo = styled.div`
     content: '';
     display: block;
     width: calc(50% - 16px);
-    height: 16px;
+    height: 12px;
     position: absolute;
-    bottom: calc(248px - 30px);
+    bottom: calc(248px - 25px);
     left: 50%;
     background: linear-gradient(to bottom, #fff, transparent);
     z-index: 9;
@@ -104,9 +53,9 @@ const StateInfo = styled.div`
     content: '';
     display: block;
     width: calc(50% - 16px);
-    height: 16px;
+    height: 12px;
     position: absolute;
-    bottom: 15px;
+    bottom: 13px;
     left: 50%;
     background: linear-gradient(to top, #fff, transparent);
     z-index: 9;
@@ -185,14 +134,19 @@ const AddButton = styled.button`
 type TotalStateType = {
   openPage: boolean;
   todayDate: string;
-  standardDate: MutableRefObject<{ year: number; month: number; }>
+  standardDate: { year: number; month: number; };
+  setStandardDate: (standardDate:{ year: number; month: number; }) => void
 }
 
-const TotalStatePage = ({openPage, todayDate, standardDate}:TotalStateType) => {
+const TotalStatePage = ({openPage, todayDate, standardDate, setStandardDate}:TotalStateType) => {
   type monthlyDataType = {
     date: number,
     hour: number,
     minute: number
+  }
+  type MonthlyDataByServerType = {
+    date: string,
+    monthlyData: monthlyDataType[]
   }
   type averageTimeType = {
     hour: number,
@@ -200,7 +154,6 @@ const TotalStatePage = ({openPage, todayDate, standardDate}:TotalStateType) => {
     state: stateType
   }
   const newState = useRef<stateType>(0);
-  standardDate.current = {year: parseInt(todayDate.slice(0, 4)), month: parseInt(todayDate.slice(6, 8))};
 
   const message = useRef({
     8: (<span>아주 좋아!<br />꿀잠으로 건강해져랏~<br />슈퍼꿀잠 파이팅!!</span>),
@@ -213,24 +166,58 @@ const TotalStatePage = ({openPage, todayDate, standardDate}:TotalStateType) => {
 
   const [monthlyData, setMonthlyData] = useState<monthlyDataType[]>([]);
   const [averageTime, setAverageTime] = useState<averageTimeType>({hour: 0, minute: 0, state: 0});
-  const MonthlyDataByServer = useRef<monthlyDataType[]>([
-    { date: 5, hour: 5, minute: 50 },
-    { date: 6, hour: 9, minute: 50 },
-    { date: 7, hour: 2, minute: 20 },
-    { date: 8, hour: 5, minute: 30 },
-    { date: 9, hour: 4, minute: 10 },
-    { date: 10, hour: 7, minute: 10 },
-    { date: 11, hour: 9, minute: 0 },
-    { date: 12, hour: 6, minute: 0 },
-    { date: 13, hour: 4, minute: 0 },
-    { date: 14, hour: 11, minute: 40 },
-    { date: 15, hour: 9, minute: 0 }
+  const MonthlyDataByServer = useRef<MonthlyDataByServerType[]>([
+    { date: '2023-2', monthlyData: [
+      { date: 5, hour: 5, minute: 50 },
+      { date: 6, hour: 9, minute: 50 },
+      { date: 7, hour: 2, minute: 20 },
+      { date: 8, hour: 5, minute: 30 },
+      { date: 9, hour: 4, minute: 10 },
+      { date: 10, hour: 7, minute: 10 },
+      { date: 11, hour: 9, minute: 0 },
+      { date: 12, hour: 6, minute: 0 },
+      { date: 13, hour: 4, minute: 0 },
+      { date: 14, hour: 11, minute: 40 },
+      { date: 15, hour: 9, minute: 0 },
+      { date: 26, hour: 6, minute: 0 },
+      { date: 27, hour: 11, minute: 0 },
+      { date: 28, hour: 6, minute: 0 }
+    ]},
+    { date: '2023-1', monthlyData: [
+      { date: 1, hour: 8, minute: 0 },
+    ]},
+    { date: '2022-12', monthlyData: [
+      { date: 1, hour: 7, minute: 0 },
+    ]},
+    { date: '2022-11', monthlyData: [
+      { date: 1, hour: 6, minute: 0 },
+    ]},
+    { date: '2022-10', monthlyData: [
+      { date: 1, hour: 5, minute: 0 },
+    ]},
+    { date: '2022-9', monthlyData: [
+      { date: 1, hour: 4, minute: 0 },
+    ]},
+    { date: '2022-8', monthlyData: [
+      { date: 1, hour: 3, minute: 0 },
+    ]}
   ])
   useEffect(() => {
+    // TODO 
+    // 서버에서 standardDate에 해당하는 월 데이터를 가져옴!
+    // 지금은.. 서버없으니까 임의로 저장하겠음
+    const date = `${standardDate.year}-${standardDate.month}`;
+    const newMonthlyData = MonthlyDataByServer.current.find((obj) => obj.date === date)?.monthlyData;
+    console.log(newMonthlyData);
+    setMonthlyData(newMonthlyData ? newMonthlyData : []);
+  }, [standardDate])
+  useEffect(() => {
     if (monthlyData.length === 0) {
-      // TODO 서버에서 standardDate에 해당하는 월 데이터를 가져옴!
-      // 지금은.. 서버없으니까 임의로 저장하겠음
-      setMonthlyData(MonthlyDataByServer.current);
+      setAverageTime({
+        hour: Math.floor(0),
+        minute: Math.floor(0),
+        state: 0
+      });
     } else {
       const newAverageTime = monthlyData.reduce((sum, value) => {
         sum += value.hour * 60 + value.minute;
@@ -268,14 +255,86 @@ const TotalStatePage = ({openPage, todayDate, standardDate}:TotalStateType) => {
       });
     }
   },[monthlyData])
+
+  const onClickPrevButton = () => {
+    if ( standardDate.month === 1 ) {
+      setStandardDate({ year: --standardDate.year, month: 12 });
+    } else {
+      setStandardDate({ ...standardDate, month: --standardDate.month });
+    }
+  };
+  const onClickNextButton = () => {
+    if ( standardDate.month === 12 ) {
+      setStandardDate({ year: ++standardDate.year, month: 1 });
+    } else {
+      setStandardDate({ ...standardDate, month: ++standardDate.month });
+    }
+  };
+  const PrevButton = styled.button`
+    border: none;
+    border-radius: 8px;
+    background-color: unset;
+    width: 40px;
+    height: 40px;
+    position: relative;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: all 0.2s ease-in-out;
+    &:hover {
+      opacity: 1;
+    }
+    &::after {
+      content: '';
+      display: block;
+      box-sizing: border-box;
+      width: 14px;
+      height: 16px;
+      border-right: solid 14px var(--state${averageTime.state}-light2);
+      border-top: solid 8px transparent;
+      border-bottom: solid 8px transparent;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%)
+    }
+  `;
+  const NextButton = styled.button`
+    border: none;
+    border-radius: 8px;
+    background-color: unset;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    position: relative;
+    opacity: 0.5;
+    transition: all 0.2s ease-in-out;
+    &:hover {
+      opacity: 1;
+    }
+    &::after {
+      content: '';
+      display: block;
+      box-sizing: border-box;
+      width: 14px;
+      height: 16px;
+      border-left: solid 14px var(--state${averageTime.state}-light2);
+      border-top: solid 8px transparent;
+      border-bottom: solid 8px transparent;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  `;
+  
   return (
       <MonthlyWrapper className={openPage ? "opened" : ""}>
-        <EachMonthAverage className="speech-bubble">
-          <PrevButton onClick={() => {}}/>
-          {standardDate.current.year}년 {standardDate.current.month}월 평균 <span className="time">{averageTime.hour}시간 {averageTime.minute === 0 ? "00" : averageTime.minute}분</span>
-          <NextButton className="disabled" onClick={() => {}} />
+        <EachMonthAverage style={{backgroundColor: `var(--state${averageTime.state}-light)`}}>
+          <PrevButton onClick={() => {onClickPrevButton()}} />
+          {standardDate.year}년 {standardDate.month}월 평균 <span className="time">{averageTime.hour}시간 {averageTime.minute === 0 ? "" : `${averageTime.minute}분`}</span>
+          <NextButton onClick={() => {onClickNextButton()}} />
         </EachMonthAverage>
-        
+
         {monthlyData.length === 0 ? (
           <StateInfo className="undefined-monthly-data">
             <StateDataBox>

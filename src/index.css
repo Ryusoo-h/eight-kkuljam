@@ -27,18 +27,21 @@
   --state5: #F3A100;
   --state4: #00C2AB;
   --state3: #19ACFF;
+  --state0: #C2BAC7;
   --state8-light: #FFECEE;
   --state7-light: #FFECEC;
-  --state6-light: #FFF3EC;
-  --state5-light: #FFF6E8;
-  --state4-light: #ECFDE4;
-  --state3-light: #E3FBFB;
+  --state6-light: #ffede3;
+  --state5-light: #fcf1d8;
+  --state4-light: #e7fadd;
+  --state3-light: #e7f8f8;
+  --state0-light: #f1f0f3;
   --state8-light2: #FFACC0;
   --state7-light2: #FFACAC;
-  --state6-light2: #FFD5BD;
-  --state5-light2: #FFE4BA;
-  --state4-light2: #CBEABD;
-  --state3-light2: #C1F0F0;
+  --state6-light2: #ffb991;
+  --state5-light2: #fcc874;
+  --state4-light2: #ace593;
+  --state3-light2: #9cdddd;
+  --state0-light2: #d3ccdb;
 }
 body {
   padding: 0;
