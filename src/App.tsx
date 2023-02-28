@@ -12,11 +12,6 @@ function App() {
   const [standardDate, setStandardDate] = useState<{year: number, month: number}>({year: 0, month: 0});
   const navigate = useNavigate();
 
-  // TODO 자 다녀와서할거야 생각을 해봐
-  // 버튼을누르면 standardDate가 바껴
-  // -> 바뀌면 url을 바꿔
-  // -> url이 바뀌면 버튼의 날짜를 바꿔, 그 월별 데이터를 바꿔, 평균시간도 바꿔!
-
   useEffect(()=> {
     console.log(standardDate.year, "-", standardDate.month);
     if (standardDate.year === 0) {
