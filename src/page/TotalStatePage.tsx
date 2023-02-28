@@ -15,6 +15,63 @@ const EachMonthAverage = styled.div`
   }
 `;
 
+const PrevButton = styled.button`
+  border: none;
+  border-radius: 8px;
+  background-color: unset;
+  width: 40px;
+  height: 40px;
+  position: relative;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    opacity: 1;
+  }
+  &::after {
+    content: '';
+    display: block;
+    box-sizing: border-box;
+    width: 14px;
+    height: 16px;
+    border-right: ${(props) => `solid 14px var(${props.color})` || `solid 14px var(--state8-light2)`};
+    border-top: solid 8px transparent;
+    border-bottom: solid 8px transparent;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%)
+  }
+`;
+  const NextButton = styled.button`
+  border: none;
+  border-radius: 8px;
+  background-color: unset;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  position: relative;
+  opacity: 0.5;
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    opacity: 1;
+  }
+  &::after {
+    content: '';
+    display: block;
+    box-sizing: border-box;
+    width: 14px;
+    height: 16px;
+    border-left: ${(props) => `solid 14px var(${props.color})` || `solid 14px var(--state8-light2)`};
+    border-top: solid 8px transparent;
+    border-bottom: solid 8px transparent;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+`;
+
 const StateInfo = styled.div`
   font-size: 15px;
   display: grid;
@@ -260,69 +317,13 @@ const TotalStatePage = ({openPage, todayDate, standardDate, setStandardDate}:Tot
       setStandardDate({ ...standardDate, month: ++standardDate.month });
     }
   };
-  const PrevButton = styled.button`
-    border: none;
-    border-radius: 8px;
-    background-color: unset;
-    width: 40px;
-    height: 40px;
-    position: relative;
-    cursor: pointer;
-    opacity: 0.5;
-    transition: all 0.2s ease-in-out;
-    &:hover {
-      opacity: 1;
-    }
-    &::after {
-      content: '';
-      display: block;
-      box-sizing: border-box;
-      width: 14px;
-      height: 16px;
-      border-right: solid 14px var(--state${averageTime.state}-light2);
-      border-top: solid 8px transparent;
-      border-bottom: solid 8px transparent;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%)
-    }
-  `;
-  const NextButton = styled.button`
-    border: none;
-    border-radius: 8px;
-    background-color: unset;
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
-    position: relative;
-    opacity: 0.5;
-    transition: all 0.2s ease-in-out;
-    &:hover {
-      opacity: 1;
-    }
-    &::after {
-      content: '';
-      display: block;
-      box-sizing: border-box;
-      width: 14px;
-      height: 16px;
-      border-left: solid 14px var(--state${averageTime.state}-light2);
-      border-top: solid 8px transparent;
-      border-bottom: solid 8px transparent;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
-  `;
   
   return (
     <>
       <EachMonthAverage style={{backgroundColor: `var(--state${averageTime.state}-light)`}}>
-        <PrevButton onClick={() => {onClickPrevButton()}} />
+        <PrevButton color={`--state${averageTime.state}-light2`} onClick={() => {onClickPrevButton()}} />
         {standardDate.year}년 {standardDate.month}월 평균 <span className="time">{averageTime.hour}시간 {averageTime.minute === 0 ? "" : `${averageTime.minute}분`}</span>
-        <NextButton onClick={() => {onClickNextButton()}} />
+        <NextButton color={`--state${averageTime.state}-light2`} onClick={() => {onClickNextButton()}} />
       </EachMonthAverage>
 
       {monthlyData.length === 0 ? (
