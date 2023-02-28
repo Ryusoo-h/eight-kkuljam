@@ -12,7 +12,7 @@ const TotalStateWrapper = styled.section`
     flex-direction: column;
     justify-content: center;
     background-color: #fff;
-    border-radius: 13px 13px 0 0;
+    border-radius: 18px 18px 0 0;
     position: absolute;
     bottom: 0;
     left: 50%;

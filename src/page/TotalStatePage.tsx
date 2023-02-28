@@ -6,7 +6,7 @@ const EachMonthAverage = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 8px 8px 4px;
+  margin: 12px 12px 4px;
   background-color: var(--state8-light);
   border-radius: 8px;
   font-size: 18px;
@@ -71,6 +71,7 @@ const MonthlyDataBox = styled.ul`
   overflow-Y: auto;
   list-style: none;
   padding: 0;
+  margin-right: 6px;
   position: relative;
   &::-webkit-scrollbar {
     width: 6px; /*스크롤바의 너비*/
@@ -91,7 +92,7 @@ const DailyData = styled.li`
   justify-content: space-between;
   align-items: center;
   box-sizing: border-box;
-  width: calc(100% - 16px);
+  width: calc(100% - 6px);
   padding: 6px 0;
   border-bottom: solid 1px #d9d9d9;
   position: relative;
