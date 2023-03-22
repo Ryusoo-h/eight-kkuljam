@@ -3,8 +3,9 @@ import styled from 'styled-components';
 import TodayState from '../components/TodayState';
 import TodayStateInsertModal from '../components/TodayStateInsertModal';
 import { MutableRefObject, useCallback, useEffect, useRef, useState } from 'react';
-import { todayDataType } from '../types/dataType';
+import { selectedDataType, todayDataType } from '../types/dataType';
 import { Outlet, useNavigate } from 'react-router-dom';
+import AddStateInsertModal from '../components/AddStateInsertModal';
 
 
 const TotalStateWrapper = styled.section`
@@ -82,10 +83,14 @@ type homeType = {
     todayDate: MutableRefObject<string>,
     openTotalPage: boolean,
     setOpenTotalPage: (isOpen:boolean)=>void;
-    standardDate: { year: number; month: number; }
+    standardDate: { year: number; month: number; };
+    openAddInsertModal: boolean,
+    setOpenAddInsertModal: (isOpen:boolean)=>void;
+    selectedData: selectedDataType;
+    setSelectedData: (selectedData:selectedDataType)=> void;
 }
 
-const Home = ({todayDate, openTotalPage, setOpenTotalPage, standardDate}:homeType) => {
+const Home = ({todayDate, openTotalPage, setOpenTotalPage, standardDate, openAddInsertModal, setOpenAddInsertModal, selectedData, setSelectedData}:homeType) => {
     const navigate = useNavigate();
 
     const [openTodayInsertModal, setOpentodayInsertModal] = useState<boolean>(false);
@@ -187,6 +192,8 @@ const Home = ({todayDate, openTotalPage, setOpenTotalPage, standardDate}:homeTyp
                 )}
             </TotalStateWrapper>
             <TodayStateInsertModal openModal={openTodayInsertModal} setOpenModal={setOpentodayInsertModal} todayData={todayData} setTodayData={setTodayData} initialHour={initialHour} />
+            <AddStateInsertModal openModal={openAddInsertModal} setOpenModal={setOpenAddInsertModal} selectedData={selectedData} setSelectedData={setSelectedData} />
+    
         </div>
     );
 }

@@ -83,20 +83,20 @@ const TodayStateInsertModal = ({openModal, setOpenModal, todayData, setTodayData
 
     return (
         <ModalWrapper id="today-state-form-modal" className={openModal ? "" : "hidden"} ref={Modal}>
-        <div className="modal-dark-space" onClick={() => {setOpenModal(false);}} />
-        <div className="modal-white-space">
-            <div className="content-wrapper">
-                <DateBox className='date'>{todayData.year}년 {todayData.month}월 {todayData.date}일</DateBox>
-                <TimePicker hour={hour} setHour={setHour} minute={minute} setMinute={setMinute} openModal={openModal} />
-                <CompleteButton className="basic-button" type="button" onClick={()=>{
-                    setTodayData({...todayData, hour, minute}); setOpenModal(false);
-                }}>
-                    기록 완료!
-                </CompleteButton>
-                <CloseButton className="close" type="button" onClick={() => {setOpenModal(false);}}>나중에 기록할래요</CloseButton>
+            <div className="modal-dark-space" onClick={() => {setOpenModal(false);}} />
+            <div className="modal-white-space">
+                <div className="content-wrapper">
+                    <DateBox className='date'>{todayData.year}년 {todayData.month}월 {todayData.date}일</DateBox>
+                    <TimePicker hour={hour} setHour={setHour} minute={minute} setMinute={setMinute} openModal={openModal} />
+                    <CompleteButton className="basic-button" type="button" onClick={()=>{
+                        setTodayData({...todayData, hour, minute}); setOpenModal(false);
+                    }}>
+                        기록 완료!
+                    </CompleteButton>
+                    <CloseButton className="close" type="button" onClick={() => {setOpenModal(false);}}>나중에 기록할래요</CloseButton>
+                </div>
             </div>
-        </div>
-    </ModalWrapper>
+        </ModalWrapper>
     );
 }
 

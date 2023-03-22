@@ -1,6 +1,7 @@
-import { MutableRefObject, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { stateType } from "../types/dataType"
+import AddStateInsertModal from "../components/AddStateInsertModal";
+import { stateType, selectedDataType } from "../types/dataType";
 
 const EachMonthAverage = styled.div`
   display: flex;
@@ -182,10 +183,11 @@ type TotalStateType = {
   openPage: boolean;
   todayDate: string;
   standardDate: { year: number; month: number; };
-  setStandardDate: (standardDate:{ year: number; month: number; }) => void
+  setStandardDate: (standardDate:{ year: number; month: number; }) => void;
+  setOpenAddInsertModal: (isOpen:boolean)=>void;
 }
 
-const TotalStatePage = ({openPage, todayDate, standardDate, setStandardDate}:TotalStateType) => {
+const TotalStatePage = ({openPage, todayDate, standardDate, setStandardDate, setOpenAddInsertModal}:TotalStateType) => {
   type monthlyDataType = {
     date: number,
     hour: number,
@@ -214,6 +216,9 @@ const TotalStatePage = ({openPage, todayDate, standardDate, setStandardDate}:Tot
   const [monthlyData, setMonthlyData] = useState<monthlyDataType[]>([]);
   const [averageTime, setAverageTime] = useState<averageTimeType>({hour: 0, minute: 0, state: 0});
   const MonthlyDataByServer = useRef<MonthlyDataByServerType[]>([
+    { date: '2023-3', monthlyData: [
+      { date: 22, hour: 6, minute: 0 },
+    ]},
     { date: '2023-2', monthlyData: [
       { date: 5, hour: 5, minute: 50 },
       { date: 6, hour: 9, minute: 50 },
@@ -249,6 +254,7 @@ const TotalStatePage = ({openPage, todayDate, standardDate, setStandardDate}:Tot
       { date: 1, hour: 3, minute: 0 },
     ]}
   ])
+
   useEffect(() => {
     // TODO 
     // 서버에서 standardDate에 해당하는 월 데이터를 가져옴!
@@ -358,8 +364,8 @@ const TotalStatePage = ({openPage, todayDate, standardDate, setStandardDate}:Tot
           </MonthlyDataBox>
         </StateInfo>
       )}
-      <AddButton className="basic-button">기록 추가하기</AddButton>
-    </>
+      <AddButton className="basic-button" onClick={() => {setOpenAddInsertModal(true);}}>기록 추가하기</AddButton>
+      </>
   );
 }
 
