@@ -19,6 +19,18 @@
 - 전체 시간 통계 출력 => 완료
 - 전체 시간 입력 구현 => 가즈아아아 : react-datepicker 사용하기
 
+나중에 정리할거
+react-datepicker 사용
+https://yarnpkg.com/package/date-fns
+
+예제
+https://reactdatepicker.com/
+renderCustomHeader : 모달 달력의 년, 월 표시하는 부분을 커스텀 할 수 있다
+
+
+
+
+
 ### 나중에 해야 할일
 - 시간 보여줄때 0분이면 분 표시 없애기 ex) 8시 0분 => 8시 ✅
 - 오늘 시간 입력시 초기값 8시일것 ✅

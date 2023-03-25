@@ -2,11 +2,10 @@
 import styled from 'styled-components';
 import TodayState from '../components/TodayState';
 import TodayStateInsertModal from '../components/TodayStateInsertModal';
-import { MutableRefObject, useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { selectedDataType, todayDataType } from '../types/dataType';
 import { Outlet, useNavigate } from 'react-router-dom';
 import AddStateInsertModal from '../components/AddStateInsertModal';
-
 
 const TotalStateWrapper = styled.section`
     display: flex;
@@ -79,24 +78,15 @@ const MonthlyWrapper = styled.div`
     }
 `;
 
-type homeType = {
-    todayDate: MutableRefObject<string>,
-    openTotalPage: boolean,
-    setOpenTotalPage: (isOpen:boolean)=>void;
-    standardDate: { year: number; month: number; };
-    openAddInsertModal: boolean,
-    setOpenAddInsertModal: (isOpen:boolean)=>void;
-    selectedData: selectedDataType;
-    setSelectedData: (selectedData:selectedDataType)=> void;
-}
-
-const Home = ({todayDate, openTotalPage, setOpenTotalPage, standardDate, openAddInsertModal, setOpenAddInsertModal, selectedData, setSelectedData}:homeType) => {
+const Home = () => {
+    const todayDate = useRef<string>('');
+    const [paramsOfTotalStatePage, setParamsOfTotalStatePage] = useState<{year: number, month: number}>({year: 0, month: 0});
     const navigate = useNavigate();
 
+    const [openTotalStatePage, setOpenTotalStatePage] = useState<boolean>(false);
     const [openTodayInsertModal, setOpentodayInsertModal] = useState<boolean>(false);
-    
-    // const [monthlyData, setMonthlyData] = useState<todayDataType[]>([]);
-    
+    const [openAddInsertModal, setOpenAddInsertModal] = useState<boolean>(false);
+
     const initialHour = useRef<number>(24); // state를 바꿔주는 switch문에 걸리지 않도록 하기 위함
 
     const [todayData, setTodayData] = useState<todayDataType>({
@@ -108,6 +98,14 @@ const Home = ({todayDate, openTotalPage, setOpenTotalPage, standardDate, openAdd
         state: 0
     });
 
+    const [selectedData, setSelectedData] = useState<selectedDataType>({
+        year: 0,
+        month: 0,
+        date: 0,
+        hour: 0,
+        minute: 0
+    });
+
     const didMount = useRef(false);
     useEffect(() => {
         if (!didMount.current) { // 첫 로딩시
@@ -116,6 +114,7 @@ const Home = ({todayDate, openTotalPage, setOpenTotalPage, standardDate, openAdd
         const [year, month, date] = [today.getFullYear(), (today.getMonth() + 1), today.getDate()];
         setTodayData({...todayData, year, month, date});
         todayDate.current = `${year}-${String(month).padStart(2, "0")}-${String(date).padStart(2, "0")}`;
+        setParamsOfTotalStatePage({year: year, month: month});
         console.log('날짜 업데이트 완료', todayDate.current, year, month, date);
         didMount.current = true;
         // TODO 서버에서 오늘 데이터 찾기
@@ -164,9 +163,8 @@ const Home = ({todayDate, openTotalPage, setOpenTotalPage, standardDate, openAdd
     }, [todayData.hour, todayData.minute]);
 
     const navigateTotalStatePage = useCallback(() => {
-        navigate(`/totalState/${standardDate.year}-${standardDate.month}`);
-    },[standardDate]);
-
+        navigate(`/totalState/${paramsOfTotalStatePage.year}-${paramsOfTotalStatePage.month}`);
+    },[paramsOfTotalStatePage]);
     return (
         <div className="App">
             <TodayState todayData={todayData} />
@@ -182,15 +180,17 @@ const Home = ({todayDate, openTotalPage, setOpenTotalPage, standardDate, openAdd
             )}
             
             <TotalStateWrapper>
-                <MonthlyWrapper className={openTotalPage ? "opened" : ""}>
-                    <Outlet />
+                <MonthlyWrapper className={openTotalStatePage ? "opened" : ""}>
+                    <Outlet context={{ paramsOfTotalStatePage, setParamsOfTotalStatePage, setOpenAddInsertModal }} />
                 </MonthlyWrapper>
-                {openTotalPage ? (
-                    <TotalToggleButton className="basic-button opened" onClick={() => {setOpenTotalPage(false);  navigate('/');}}>수면시간 기록 닫아두기</TotalToggleButton>
+                {openTotalStatePage ? (
+                    <TotalToggleButton className="basic-button opened" onClick={() => {setOpenTotalStatePage(false);  navigate('/');}}>수면시간 기록 닫아두기</TotalToggleButton>
                 ) : (
-                    <TotalToggleButton className="basic-button" onClick={() => {setOpenTotalPage(true); navigateTotalStatePage();}}>수면시간 기록 전체보기</TotalToggleButton>
+                    <TotalToggleButton className="basic-button" onClick={() => {setOpenTotalStatePage(true); navigateTotalStatePage();}}>수면시간 기록 전체보기</TotalToggleButton>
                 )}
             </TotalStateWrapper>
+
+            {/* ↓↓모달 출력↓↓ */}
             <TodayStateInsertModal openModal={openTodayInsertModal} setOpenModal={setOpentodayInsertModal} todayData={todayData} setTodayData={setTodayData} initialHour={initialHour} />
             <AddStateInsertModal openModal={openAddInsertModal} setOpenModal={setOpenAddInsertModal} selectedData={selectedData} setSelectedData={setSelectedData} />
     

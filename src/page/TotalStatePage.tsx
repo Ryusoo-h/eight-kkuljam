@@ -1,7 +1,8 @@
+/* eslint-disable no-restricted-globals */
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import AddStateInsertModal from "../components/AddStateInsertModal";
-import { stateType, selectedDataType } from "../types/dataType";
+import { stateType } from "../types/dataType";
+import { useOutletContext } from 'react-router-dom';
 
 const EachMonthAverage = styled.div`
   display: flex;
@@ -179,15 +180,14 @@ const AddButton = styled.button`
   margin: 8px auto 16px;
 `;
 
-type TotalStateType = {
-  openPage: boolean;
-  todayDate: string;
-  standardDate: { year: number; month: number; };
-  setStandardDate: (standardDate:{ year: number; month: number; }) => void;
+
+type outletProps = {
+  paramsOfTotalStatePage: { year: number; month: number; };
+  setParamsOfTotalStatePage: (standardDate:{ year: number; month: number; }) => void;
   setOpenAddInsertModal: (isOpen:boolean)=>void;
 }
 
-const TotalStatePage = ({openPage, todayDate, standardDate, setStandardDate, setOpenAddInsertModal}:TotalStateType) => {
+const TotalStatePage = () => {
   type monthlyDataType = {
     date: number,
     hour: number,
@@ -213,6 +213,7 @@ const TotalStatePage = ({openPage, todayDate, standardDate, setStandardDate, set
     3: (<span>끄앙 꿀쟘젤리 살려..<br />이렇게는 못 살아...<br />수면부족이야 우앵~</span>),
   });
 
+  const {paramsOfTotalStatePage, setParamsOfTotalStatePage, setOpenAddInsertModal} = useOutletContext<outletProps>();
   const [monthlyData, setMonthlyData] = useState<monthlyDataType[]>([]);
   const [averageTime, setAverageTime] = useState<averageTimeType>({hour: 0, minute: 0, state: 0});
   const MonthlyDataByServer = useRef<MonthlyDataByServerType[]>([
@@ -255,15 +256,25 @@ const TotalStatePage = ({openPage, todayDate, standardDate, setStandardDate, set
     ]}
   ])
 
+  const addNewDataInMonthlyData = () => {
+    // TODO
+    // 자고 일어나면 이 함수를 만들자
+    // '기록 추가하기'에서 -> '기록 완료' 버튼을 누르면
+    // selectedData에 저장된것을 monthlyData에 저장한다
+    // 그리고 서버에도 저장한다 (나중에.. axios로)
+    // 저장을 모두 완료했으면 selectedData를 초기화 시켜준다
+
+    // 이 함수를 만들었으면 함수를 '기록 완료'버튼의 onClick에 넣어주자
+  }
+
   useEffect(() => {
     // TODO 
-    // 서버에서 standardDate에 해당하는 월 데이터를 가져옴!
+    // 서버에서 paramsOfTotalStatePage에 해당하는 월 데이터를 가져옴!
     // 지금은.. 서버없으니까 임의로 저장하겠음
-    const date = `${standardDate.year}-${standardDate.month}`;
+    const date = `${paramsOfTotalStatePage.year}-${paramsOfTotalStatePage.month}`;
     const newMonthlyData = MonthlyDataByServer.current.find((obj) => obj.date === date)?.monthlyData;
-    console.log(newMonthlyData);
     setMonthlyData(newMonthlyData ? newMonthlyData : []);
-  }, [standardDate])
+  }, [paramsOfTotalStatePage])
   useEffect(() => {
     if (monthlyData.length === 0) {
       setAverageTime({
@@ -310,17 +321,17 @@ const TotalStatePage = ({openPage, todayDate, standardDate, setStandardDate, set
   },[monthlyData])
 
   const onClickPrevButton = () => {
-    if ( standardDate.month === 1 ) {
-      setStandardDate({ year: --standardDate.year, month: 12 });
+    if ( paramsOfTotalStatePage.month === 1 ) {
+      setParamsOfTotalStatePage({ year: --paramsOfTotalStatePage.year, month: 12 });
     } else {
-      setStandardDate({ ...standardDate, month: --standardDate.month });
+      setParamsOfTotalStatePage({ ...paramsOfTotalStatePage, month: --paramsOfTotalStatePage.month });
     }
   };
   const onClickNextButton = () => {
-    if ( standardDate.month === 12 ) {
-      setStandardDate({ year: ++standardDate.year, month: 1 });
+    if ( paramsOfTotalStatePage.month === 12 ) {
+      setParamsOfTotalStatePage({ year: ++paramsOfTotalStatePage.year, month: 1 });
     } else {
-      setStandardDate({ ...standardDate, month: ++standardDate.month });
+      setParamsOfTotalStatePage({ ...paramsOfTotalStatePage, month: ++paramsOfTotalStatePage.month });
     }
   };
   
@@ -328,7 +339,7 @@ const TotalStatePage = ({openPage, todayDate, standardDate, setStandardDate, set
     <>
       <EachMonthAverage style={{backgroundColor: `var(--state${averageTime.state}-light)`}}>
         <PrevButton color={`--state${averageTime.state}-light2`} onClick={() => {onClickPrevButton()}} />
-        {standardDate.year}년 {standardDate.month}월 평균 <span className="time">{averageTime.hour}시간 {averageTime.minute === 0 ? "" : `${averageTime.minute}분`}</span>
+        {paramsOfTotalStatePage.year}년 {paramsOfTotalStatePage.month}월 평균 <span className="time">{averageTime.hour}시간 {averageTime.minute === 0 ? "" : `${averageTime.minute}분`}</span>
         <NextButton color={`--state${averageTime.state}-light2`} onClick={() => {onClickNextButton()}} />
       </EachMonthAverage>
 
@@ -351,7 +362,7 @@ const TotalStatePage = ({openPage, todayDate, standardDate, setStandardDate, set
           <MonthlyDataBox>
             {monthlyData.map((data) => {
               return (
-                <DailyData key={data.date}>
+                <DailyData key={`${location.pathname.slice(1).replace('/', '-')}-${data.date}`}>
                   <span className="date">{data.date}일</span>
                   <span className="time">{data.hour}시간 {data.minute ! === 0 ? "00분" : `${data.minute}분`}</span>
                   <div className="button-wrapper hidden">
