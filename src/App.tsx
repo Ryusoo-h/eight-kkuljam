@@ -22,14 +22,12 @@ function App() {
   const [standardDate, setStandardDate] = useState<{year: number, month: number}>({year: 0, month: 0});
   const navigate = useNavigate();
 
-
-  useEffect(()=> {
-    console.log(standardDate.year, "-", standardDate.month);
+  useEffect(() => {
     if (standardDate.year === 0) {
-      console.log('처음');
+      // console.log('처음');
       setStandardDate({year: parseInt(todayDate.current.slice(0, 4)), month: parseInt(todayDate.current.slice(6, 8))});
     } else {
-      console.log('처음아님');
+      // console.log('처음아님');
       navigate(`/totalState/${standardDate.year}-${standardDate.month}`);
     }
   },[standardDate])
