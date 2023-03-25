@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { stateType } from "../types/dataType";
 import { useOutletContext } from 'react-router-dom';
+import getMonthlyList from "../apis/getMonthlyList";
 
 const EachMonthAverage = styled.div`
   display: flex;
@@ -189,13 +190,12 @@ type outletProps = {
 
 const TotalStatePage = () => {
   type monthlyDataType = {
+    id: number,
+    year: number,
+    month: number,
     date: number,
     hour: number,
     minute: number
-  }
-  type MonthlyDataByServerType = {
-    date: string,
-    monthlyData: monthlyDataType[]
   }
   type averageTimeType = {
     hour: number,
@@ -216,45 +216,6 @@ const TotalStatePage = () => {
   const {paramsOfTotalStatePage, setParamsOfTotalStatePage, setOpenAddInsertModal} = useOutletContext<outletProps>();
   const [monthlyData, setMonthlyData] = useState<monthlyDataType[]>([]);
   const [averageTime, setAverageTime] = useState<averageTimeType>({hour: 0, minute: 0, state: 0});
-  const MonthlyDataByServer = useRef<MonthlyDataByServerType[]>([
-    { date: '2023-3', monthlyData: [
-      { date: 22, hour: 6, minute: 0 },
-    ]},
-    { date: '2023-2', monthlyData: [
-      { date: 5, hour: 5, minute: 50 },
-      { date: 6, hour: 9, minute: 50 },
-      { date: 7, hour: 2, minute: 20 },
-      { date: 8, hour: 5, minute: 30 },
-      { date: 9, hour: 4, minute: 10 },
-      { date: 10, hour: 7, minute: 10 },
-      { date: 11, hour: 9, minute: 0 },
-      { date: 12, hour: 6, minute: 0 },
-      { date: 13, hour: 4, minute: 0 },
-      { date: 14, hour: 11, minute: 40 },
-      { date: 15, hour: 9, minute: 0 },
-      { date: 26, hour: 6, minute: 0 },
-      { date: 27, hour: 11, minute: 0 },
-      { date: 28, hour: 6, minute: 0 }
-    ]},
-    { date: '2023-1', monthlyData: [
-      { date: 1, hour: 8, minute: 0 },
-    ]},
-    { date: '2022-12', monthlyData: [
-      { date: 1, hour: 7, minute: 0 },
-    ]},
-    { date: '2022-11', monthlyData: [
-      { date: 1, hour: 6, minute: 0 },
-    ]},
-    { date: '2022-10', monthlyData: [
-      { date: 1, hour: 5, minute: 0 },
-    ]},
-    { date: '2022-9', monthlyData: [
-      { date: 1, hour: 4, minute: 0 },
-    ]},
-    { date: '2022-8', monthlyData: [
-      { date: 1, hour: 3, minute: 0 },
-    ]}
-  ])
 
   const addNewDataInMonthlyData = () => {
     // TODO
@@ -270,11 +231,13 @@ const TotalStatePage = () => {
   useEffect(() => {
     // TODO 
     // 서버에서 paramsOfTotalStatePage에 해당하는 월 데이터를 가져옴!
-    // 지금은.. 서버없으니까 임의로 저장하겠음
-    const date = `${paramsOfTotalStatePage.year}-${paramsOfTotalStatePage.month}`;
-    const newMonthlyData = MonthlyDataByServer.current.find((obj) => obj.date === date)?.monthlyData;
-    setMonthlyData(newMonthlyData ? newMonthlyData : []);
+    const getServerMonthlyList = async() => {
+      const newMonthlyData = await getMonthlyList(paramsOfTotalStatePage.year, paramsOfTotalStatePage.month);
+      setMonthlyData(newMonthlyData);
+    };
+    getServerMonthlyList();
   }, [paramsOfTotalStatePage])
+  
   useEffect(() => {
     if (monthlyData.length === 0) {
       setAverageTime({
