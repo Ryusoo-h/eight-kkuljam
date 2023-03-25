@@ -6,7 +6,6 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale, setDefaultLocale } from  "react-datepicker";
 import ko from 'date-fns/locale/ko';
-import { isButtonElement } from 'react-router-dom/dist/dom';
 registerLocale('ko', ko);
 setDefaultLocale('ko');
 
@@ -78,6 +77,13 @@ const DatePickerWrapper = styled.div`
     }
     .react-datepicker__day--outside-month {
         color: #bbb;
+    }
+    .react-datepicker__day--disabled, 
+    .react-datepicker__month-text--disabled, 
+    .react-datepicker__quarter-text--disabled, 
+    .react-datepicker__year-text--disabled {
+        cursor: default;
+        color: #ddd;
     }
     .react-datepicker__day-name {
         &:first-child {
@@ -238,6 +244,7 @@ const AddStateInsertModal = ({openModal, setOpenModal, selectedData, setSelected
                                     );
                                 }
                             }
+                            maxDate={new Date()}
                             inline
                         />
                     </DatePickerWrapper>
