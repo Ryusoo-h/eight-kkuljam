@@ -2,6 +2,7 @@
 export type stateType =  8 | 7 | 6 | 5 | 4 | 3 | 0;
 
 export type todayDataType = {
+    id: number,
     year: number, 
     month: number, 
     date: number, 
@@ -14,6 +15,7 @@ export type todayDataType = {
 }
 
 export type selectedDataType = {
+    id: number,
     year: number, 
     month: number, 
     date: number, 

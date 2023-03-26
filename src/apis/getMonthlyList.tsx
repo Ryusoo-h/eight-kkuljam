@@ -11,17 +11,20 @@ type listProps = {
 }
 
 const getMonthlyList = async ( year:number, month:number ) => {
-    const response = await axios.get(LIST_URL, {
-        params: {
-            year,
-            month,
+    const response = await axios.get(
+        LIST_URL, 
+        {
+            params: {
+                year,
+                month,
+            }
         }
-    })
+    )
     .then(response => {
         return response.data.sort((a:listProps, b:listProps) => {return a.date - b.date});
     })
     .catch(e => {
-        console.log('✅getTodos API 에러 : ', e);
+        console.log('✅getMonthlyList API 에러 : ', e);
         return [];
     });
 

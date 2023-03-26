@@ -6,6 +6,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { selectedDataType, todayDataType } from '../types/dataType';
 import { Outlet, useNavigate } from 'react-router-dom';
 import AddStateInsertModal from '../components/AddStateInsertModal';
+import getTodayData from '../apis/getTodayData';
 
 const TotalStateWrapper = styled.section`
     display: flex;
@@ -79,7 +80,6 @@ const MonthlyWrapper = styled.div`
 `;
 
 const Home = () => {
-    const todayDate = useRef<string>('');
     const [paramsOfTotalStatePage, setParamsOfTotalStatePage] = useState<{year: number, month: number}>({year: 0, month: 0});
     const navigate = useNavigate();
 
@@ -90,6 +90,7 @@ const Home = () => {
     const initialHour = useRef<number>(24); // state를 바꿔주는 switch문에 걸리지 않도록 하기 위함
 
     const [todayData, setTodayData] = useState<todayDataType>({
+        id: 0,
         year: 0,
         month: 0,
         date: 0,
@@ -99,6 +100,7 @@ const Home = () => {
     });
 
     const [selectedData, setSelectedData] = useState<selectedDataType>({
+        id: 0,
         year: 0,
         month: 0,
         date: 0,
@@ -108,32 +110,29 @@ const Home = () => {
 
     const didMount = useRef(false);
     useEffect(() => {
-        if (!didMount.current) { // 첫 로딩시
-        console.log('첫 로딩시 : ', todayData);
-        const today = new Date();
-        const [year, month, date] = [today.getFullYear(), (today.getMonth() + 1), today.getDate()];
-        setTodayData({...todayData, year, month, date});
-        todayDate.current = `${year}-${String(month).padStart(2, "0")}-${String(date).padStart(2, "0")}`;
-        setParamsOfTotalStatePage({year: year, month: month});
-        console.log('날짜 업데이트 완료', todayDate.current, year, month, date);
-        didMount.current = true;
-        // TODO 서버에서 오늘 데이터 찾기
-        // 있으면 데이터 변경
-        // 지금은 테스트를 위해 localStorage에서 찾겠음
-        const localTodayData = localStorage.getItem(todayDate.current);
-        localTodayData && setTodayData(JSON.parse(localTodayData));
-        } else if (todayData.state !== 0) { // 오늘 날짜 수면시간을 기록했을 때
-        // TODO todayData를 서버에 저장해야지
-        // 지금은 테스트를 위해 localstorage에 저장하쥬
-        localStorage.setItem(todayDate.current, JSON.stringify(todayData));
-        } else {
-        console.log('todayData변화가 있을때 마다 : ', todayData);
+        if (!didMount.current) { // 첫 로딩시 날짜 업데이트 -> 오늘 데이터 가져오기
+            const today = new Date();
+            const [year, month, date]:number[] = [today.getFullYear(), (today.getMonth() + 1), today.getDate()];
+            // const customId = `${year}-${String(month).padStart(2,"0")}-${String(date).padStart(2,"0")}`;
+            setParamsOfTotalStatePage({year: year, month: month});
+            // 서버에서 오늘 데이터 찾기
+            const getServerTodayData = async (year:number, month:number, date:number) => {
+                const response = await getTodayData( year, month, date );
+                if (Array.isArray(response) && response.length !== 0) {
+                    setTodayData({...todayData, ...response[0]});
+                } else {
+                    setTodayData({...todayData, year, month, date});
+                }
+            }
+            getServerTodayData(year, month, date);
+            didMount.current = true;
         }
+        console.log('todayData 업데이트', todayData)
     },[todayData])
 
     useEffect(()=> { 
-        if (didMount.current && todayData.hour !==initialHour.current) {
-        console.log('시간입력 후 state 업데이트');
+        if (didMount.current && todayData.hour !== initialHour.current) {
+        console.log('시간입력 후 state 업데이트 : ', todayData);
         switch(todayData.hour) {
             case 0:
             case 1:
@@ -165,6 +164,7 @@ const Home = () => {
     const navigateTotalStatePage = useCallback(() => {
         navigate(`/totalState/${paramsOfTotalStatePage.year}-${paramsOfTotalStatePage.month}`);
     },[paramsOfTotalStatePage]);
+
     return (
         <div className="App">
             <TodayState todayData={todayData} />
@@ -193,7 +193,6 @@ const Home = () => {
             {/* ↓↓모달 출력↓↓ */}
             <TodayStateInsertModal openModal={openTodayInsertModal} setOpenModal={setOpentodayInsertModal} todayData={todayData} setTodayData={setTodayData} initialHour={initialHour} />
             <AddStateInsertModal openModal={openAddInsertModal} setOpenModal={setOpenAddInsertModal} selectedData={selectedData} setSelectedData={setSelectedData} />
-    
         </div>
     );
 }

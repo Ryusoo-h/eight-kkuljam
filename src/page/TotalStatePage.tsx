@@ -229,7 +229,6 @@ const TotalStatePage = () => {
   }
 
   useEffect(() => {
-    // TODO 
     // 서버에서 paramsOfTotalStatePage에 해당하는 월 데이터를 가져옴!
     const getServerMonthlyList = async() => {
       const newMonthlyData = await getMonthlyList(paramsOfTotalStatePage.year, paramsOfTotalStatePage.month);

@@ -1,5 +1,7 @@
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import postDayData from '../apis/postDayData';
+import putDayData from '../apis/putDayData';
 import { todayDataType } from '../types/dataType';
 import TimePicker from './TimePicker';
 
@@ -81,6 +83,19 @@ const TodayStateInsertModal = ({openModal, setOpenModal, todayData, setTodayData
         setMinute(todayData.minute);
     },[todayData])
 
+    const onClickCompleteButton = async () => {
+        let response;
+        if (todayData.hour === initialHour.current) {
+            response = await postDayData({...todayData, hour, minute});
+        } else {
+            response = await putDayData({...todayData, hour, minute});
+        }
+        if (response) {
+            setTodayData({...todayData, hour, minute});
+            setOpenModal(false);
+        }
+    }
+
     return (
         <ModalWrapper id="today-state-form-modal" className={openModal ? "" : "hidden"} ref={Modal}>
             <div className="modal-dark-space" onClick={() => {setOpenModal(false);}} />
@@ -88,9 +103,7 @@ const TodayStateInsertModal = ({openModal, setOpenModal, todayData, setTodayData
                 <div className="content-wrapper">
                     <DateBox className='date'>{todayData.year}년 {todayData.month}월 {todayData.date}일</DateBox>
                     <TimePicker hour={hour} setHour={setHour} minute={minute} setMinute={setMinute} openModal={openModal} />
-                    <CompleteButton className="basic-button" type="button" onClick={()=>{
-                        setTodayData({...todayData, hour, minute}); setOpenModal(false);
-                    }}>
+                    <CompleteButton className="basic-button" type="button" onClick={()=>{ onClickCompleteButton(); }}>
                         기록 완료!
                     </CompleteButton>
                     <CloseButton className="close" type="button" onClick={() => {setOpenModal(false);}}>나중에 기록할래요</CloseButton>
