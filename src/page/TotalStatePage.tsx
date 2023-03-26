@@ -324,7 +324,7 @@ const TotalStatePage = () => {
           <MonthlyDataBox>
             {monthlyData.map((data) => {
               return (
-                <DailyData key={`${location.pathname.slice(1).replace('/', '-')}-${data.date}`}>
+                <DailyData key={data.id}>
                   <span className="date">{data.date}일</span>
                   <span className="time">{data.hour}시간 {data.minute ! === 0 ? "00분" : `${data.minute}분`}</span>
                   <div className="button-wrapper hidden">
