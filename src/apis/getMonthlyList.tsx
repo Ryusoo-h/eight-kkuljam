@@ -1,15 +1,6 @@
 import axios from "axios"
 import { LIST_URL } from "./url"
 
-type listProps = {
-    id: number;
-    year: number;
-    month: number;
-    date: number;
-    hour: number;
-    minute: number;
-}
-
 const getMonthlyList = async ( year:number, month:number ) => {
     const response = await axios.get(
         LIST_URL, 
@@ -21,7 +12,7 @@ const getMonthlyList = async ( year:number, month:number ) => {
         }
     )
     .then(response => {
-        return response.data.sort((a:listProps, b:listProps) => {return a.date - b.date});
+        return response.data;
     })
     .catch(e => {
         console.log('✅getMonthlyList API 에러 : ', e);
