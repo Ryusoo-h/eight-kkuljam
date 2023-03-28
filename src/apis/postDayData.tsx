@@ -8,7 +8,7 @@ const postDayData = async (selectedData:selectedDataType) => {
     const response = await axios.post(
         LIST_URL, 
         {
-            id,
+            id, //TODO: json-server에서 id를 빼고 넘기면 오류가 난다. 나중에 실제 서버생기면 id 없애고 보낼것.
             year,
             month,
             date,
