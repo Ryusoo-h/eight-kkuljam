@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-globals */
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { stateType } from "../types/dataType";
+import { selectedDataType, stateType } from "../types/dataType";
 import { useOutletContext } from 'react-router-dom';
 import getMonthlyList from "../apis/getMonthlyList";
 
@@ -183,6 +183,8 @@ const AddButton = styled.button`
 
 
 type outletProps = {
+  selectedData: selectedDataType;
+  setSelectedData: (selectedData:selectedDataType) => void;
   paramsOfTotalStatePage: { year: number; month: number; };
   setParamsOfTotalStatePage: (standardDate:{ year: number; month: number; }) => void;
   setOpenAddInsertModal: (isOpen:boolean)=>void;
@@ -213,20 +215,9 @@ const TotalStatePage = () => {
     3: (<span>끄앙 꿀쟘젤리 살려..<br />이렇게는 못 살아...<br />수면부족이야 우앵~</span>),
   });
 
-  const {paramsOfTotalStatePage, setParamsOfTotalStatePage, setOpenAddInsertModal} = useOutletContext<outletProps>();
+  const {selectedData, setSelectedData, paramsOfTotalStatePage, setParamsOfTotalStatePage, setOpenAddInsertModal} = useOutletContext<outletProps>();
   const [monthlyData, setMonthlyData] = useState<monthlyDataType[]>([]);
   const [averageTime, setAverageTime] = useState<averageTimeType>({hour: 0, minute: 0, state: 0});
-
-  const addNewDataInMonthlyData = () => {
-    // TODO
-    // 자고 일어나면 이 함수를 만들자
-    // '기록 추가하기'에서 -> '기록 완료' 버튼을 누르면
-    // selectedData에 저장된것을 monthlyData에 저장한다
-    // 그리고 서버에도 저장한다 (나중에.. axios로)
-    // 저장을 모두 완료했으면 selectedData를 초기화 시켜준다
-
-    // 이 함수를 만들었으면 함수를 '기록 완료'버튼의 onClick에 넣어주자
-  }
 
   useEffect(() => {
     // 서버에서 paramsOfTotalStatePage에 해당하는 월 데이터를 가져옴!
@@ -279,8 +270,23 @@ const TotalStatePage = () => {
         minute: Math.floor(newAverageTime%60),
         state: newState.current
       });
+      setMonthlyData(monthlyData.sort((a:monthlyDataType, b:monthlyDataType) => {return a.date - b.date}));
     }
-  },[monthlyData])
+  },[monthlyData]);
+
+  useEffect(() => {
+    if (selectedData.id !== 0) {
+      setMonthlyData([...monthlyData, selectedData]);
+      setSelectedData({
+        id: 0,
+        year: 0,
+        month: 0,
+        date: 0,
+        hour: 0,
+        minute: 0
+      });
+    }
+  }, [selectedData.id]);
 
   const onClickPrevButton = () => {
     if ( paramsOfTotalStatePage.month === 1 ) {

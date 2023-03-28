@@ -6,6 +6,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale, setDefaultLocale } from  "react-datepicker";
 import ko from 'date-fns/locale/ko';
+import postDayData from '../apis/postDayData';
 registerLocale('ko', ko);
 setDefaultLocale('ko');
 
@@ -220,6 +221,13 @@ const AddStateInsertModal = ({openModal, setOpenModal, selectedData, setSelected
         })
     },[startDate])
 
+    const addNewDataInMonthlyData = async (selectedData:selectedDataType) => {
+        const postedData = await postDayData(selectedData);
+        if (!Array.isArray(postedData)) {
+            setSelectedData(postedData);
+        }
+    }
+
     return (
         <ModalWrapper id="today-state-form-modal" className={openModal ? "" : "hidden"} ref={Modal}>
             <div className="modal-dark-space" onClick={() => {setOpenModal(false); setHiddneDatePicker(false);}} />
@@ -250,7 +258,8 @@ const AddStateInsertModal = ({openModal, setOpenModal, selectedData, setSelected
                     </DatePickerWrapper>
                     <TimePicker hour={hour} setHour={setHour} minute={minute} setMinute={setMinute} openModal={openModal} />
                     <CompleteButton className="basic-button" type="button" onClick={()=>{
-                        setSelectedData({...selectedData, hour, minute}); setOpenModal(false);
+                        addNewDataInMonthlyData({...selectedData, hour, minute});
+                        setOpenModal(false);
                         setHiddneDatePicker(false);
                     }}>
                         기록 완료!
