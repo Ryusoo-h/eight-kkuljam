@@ -85,10 +85,11 @@ const TodayStateInsertModal = ({openModal, setOpenModal, todayData, setTodayData
 
     const onClickCompleteButton = async () => {
         let response;
+        const {id, year, month, date} = todayData;
         if (todayData.hour === initialHour.current) {
-            response = await postDayData({...todayData, hour, minute});
+            response = await postDayData({id, year, month, date, hour, minute});
         } else {
-            response = await putDayData({...todayData, hour, minute});
+            response = await putDayData({id, year, month, date, hour, minute});
         }
         if (!Array.isArray(response)) {
             setTodayData({...todayData, ...response});
