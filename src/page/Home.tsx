@@ -6,7 +6,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { selectedDataType, todayDataType } from '../types/dataType';
 import { Outlet, useNavigate } from 'react-router-dom';
 import AddStateInsertModal from '../components/AddStateInsertModal';
-import getTodayData from '../apis/getTodayData';
+import getTheDayData from '../apis/getTheDayData';
 
 const TotalStateWrapper = styled.section`
     display: flex;
@@ -117,7 +117,7 @@ const Home = () => {
             setParamsOfTotalStatePage({year: year, month: month});
             // 서버에서 오늘 데이터 찾기
             const getServerTodayData = async (year:number, month:number, date:number) => {
-                const response = await getTodayData( year, month, date );
+                const response = await getTheDayData( year, month, date );
                 if (Array.isArray(response) && response.length !== 0) {
                     setTodayData({...todayData, ...response[0]});
                 } else {
