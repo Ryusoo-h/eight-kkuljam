@@ -90,8 +90,8 @@ const TodayStateInsertModal = ({openModal, setOpenModal, todayData, setTodayData
         } else {
             response = await putDayData({...todayData, hour, minute});
         }
-        if (response) {
-            setTodayData({...todayData, hour, minute});
+        if (!Array.isArray(response)) {
+            setTodayData({...todayData, ...response});
             setOpenModal(false);
         }
     }
