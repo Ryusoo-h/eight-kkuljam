@@ -202,8 +202,9 @@ type AddStateInsertModalType = {
     setSelectedData: (selectedData:dateTimeStampType) => void;
     monthlyData: dateTimeStampType[];
     setMonthlyData: (monthlyData: dateTimeStampType[]) => void;
+    paramsOfTotalStatePage: {year: number, month: number};
 }
-const AddStateInsertModal = ({openModal, setOpenModal, selectedData, setSelectedData, monthlyData, setMonthlyData}:AddStateInsertModalType) => {
+const AddStateInsertModal = ({openModal, setOpenModal, selectedData, setSelectedData, monthlyData, setMonthlyData, paramsOfTotalStatePage}:AddStateInsertModalType) => {
     const Modal = useRef<any>(null);
 
     const [hour, setHour] = useState(8);
@@ -303,6 +304,10 @@ const AddStateInsertModal = ({openModal, setOpenModal, selectedData, setSelected
                             }
                             maxDate={new Date()}
                             inline
+                            openToDate={ paramsOfTotalStatePage.month > 0 
+                                ? new Date(`${paramsOfTotalStatePage.year}/${String(paramsOfTotalStatePage.month).padStart(2, '0')}/01`)
+                                : new Date('2023/02/01')
+                            } // 현재 pathname에 속하는 날짜를 보여주어야함
                         />
                     </DatePickerWrapper>
                     <TimePicker hour={hour} setHour={setHour} minute={minute} setMinute={setMinute} openModal={openModal} />
