@@ -7,6 +7,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale, setDefaultLocale } from  "react-datepicker";
 import ko from 'date-fns/locale/ko';
 import postDayData from '../apis/postDayData';
+import putDayData from '../apis/putDayData';
+import getTheDayData, { isGettedResponseEmpty } from '../apis/getTheDayData';
 registerLocale('ko', ko);
 setDefaultLocale('ko');
 
@@ -222,9 +224,15 @@ const AddStateInsertModal = ({openModal, setOpenModal, selectedData, setSelected
     },[startDate])
 
     const addNewDataInMonthlyData = async (selectedData:selectedDataType) => {
-        const postedData = await postDayData(selectedData);
-        if (!Array.isArray(postedData)) {
-            setSelectedData(postedData);
+
+        const {year, month, date, hour, minute} = selectedData;
+        const theDayData = await getTheDayData(year, month, date);
+        const newData = isGettedResponseEmpty(theDayData)
+            ? await postDayData(selectedData)
+            : await putDayData({ ...theDayData[0], hour, minute });
+        
+        if (!Array.isArray(newData)) {
+            setSelectedData(newData);
         }
     }
 
