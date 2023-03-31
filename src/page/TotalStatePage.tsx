@@ -281,14 +281,14 @@ const TotalStatePage = () => {
     }
   }, [selectedData.id]);
 
-  const onClickPrevButton = () => {
+  const onClickPrevMonthButton = () => {
     if ( paramsOfTotalStatePage.month === 1 ) {
       setParamsOfTotalStatePage({ year: --paramsOfTotalStatePage.year, month: 12 });
     } else {
       setParamsOfTotalStatePage({ ...paramsOfTotalStatePage, month: --paramsOfTotalStatePage.month });
     }
   };
-  const onClickNextButton = () => {
+  const onClickNextMonthButton = () => {
     if ( paramsOfTotalStatePage.month === 12 ) {
       setParamsOfTotalStatePage({ year: ++paramsOfTotalStatePage.year, month: 1 });
     } else {
@@ -299,9 +299,9 @@ const TotalStatePage = () => {
   return (
     <>
       <EachMonthAverage style={{backgroundColor: `var(--state${averageTime.state}-light)`}}>
-        <PrevButton color={`--state${averageTime.state}-light2`} onClick={() => {onClickPrevButton()}} />
+        <PrevButton color={`--state${averageTime.state}-light2`} onClick={() => {onClickPrevMonthButton()}} />
         {paramsOfTotalStatePage.year}년 {paramsOfTotalStatePage.month}월 평균 <span className="time">{averageTime.hour}시간 {averageTime.minute === 0 ? "" : `${averageTime.minute}분`}</span>
-        <NextButton color={`--state${averageTime.state}-light2`} onClick={() => {onClickNextButton()}} />
+        <NextButton color={`--state${averageTime.state}-light2`} onClick={() => {onClickNextMonthButton()}} />
       </EachMonthAverage>
 
       {monthlyData.length === 0 ? (
