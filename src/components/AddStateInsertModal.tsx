@@ -266,7 +266,6 @@ const AddStateInsertModal = ({openModal, setOpenModal, selectedData, setSelected
         }) >= 0) {
             // 이미 저장되어있는 날짜일 경우
             setOpenModifyModal(true);
-            setHiddenDatePicker(true);
         } else {
             // 없으면 원래하던대로 저장
             setHiddenDatePicker(true);
@@ -314,7 +313,7 @@ const AddStateInsertModal = ({openModal, setOpenModal, selectedData, setSelected
                 </div>
             </div>
             {openModifyModal
-                && <YesOrNoModal onClickYes={() => {setIsModify(true); setOpenModifyModal(false);}} onClickNo={() => {setOpenModifyModal(false); setStartDate(new Date());}}>
+                && <YesOrNoModal onClickYes={() => {setIsModify(true); setOpenModifyModal(false); setHiddenDatePicker(true);}} onClickNo={() => {setOpenModifyModal(false); setStartDate(new Date());}}>
                     <span>{startDate.getFullYear()}년 {startDate.getMonth() + 1}월 {startDate.getDate()}일은<br />이미 기록이 있습니다.<br />새로 수정하시겠습니까?</span>
                 </YesOrNoModal>
             }
