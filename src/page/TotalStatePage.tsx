@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { dateTimeStampType, stateType } from "../types/dataType";
-import { useOutletContext } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import getMonthlyList from "../apis/getMonthlyList";
 
 const EachMonthAverage = styled.div`
@@ -193,6 +193,8 @@ type outletProps = {
 }
 
 const TotalStatePage = () => {
+  const navigate = useNavigate();
+
   type averageTimeType = {
     hour: number,
     minute: number,
@@ -268,18 +270,18 @@ const TotalStatePage = () => {
   },[monthlyData]);
 
   const onClickPrevMonthButton = () => {
-    if ( paramsOfTotalStatePage.month === 1 ) {
-      setParamsOfTotalStatePage({ year: --paramsOfTotalStatePage.year, month: 12 });
-    } else {
-      setParamsOfTotalStatePage({ ...paramsOfTotalStatePage, month: --paramsOfTotalStatePage.month });
-    }
+    let {year, month} = paramsOfTotalStatePage;
+    year = (month === 1) ? --year : year;
+    month = (month === 1) ? 12 : --month;
+    setParamsOfTotalStatePage({ year, month });
+    navigate(`/totalState/${year}-${month}`);
   };
   const onClickNextMonthButton = () => {
-    if ( paramsOfTotalStatePage.month === 12 ) {
-      setParamsOfTotalStatePage({ year: ++paramsOfTotalStatePage.year, month: 1 });
-    } else {
-      setParamsOfTotalStatePage({ ...paramsOfTotalStatePage, month: ++paramsOfTotalStatePage.month });
-    }
+    let {year, month} = paramsOfTotalStatePage;
+    year = (month === 12) ? ++year : year;
+    month = (month === 12) ? 1 : ++month;
+    setParamsOfTotalStatePage({ year, month });
+    navigate(`/totalState/${year}-${month}`);
   };
   
   return (
