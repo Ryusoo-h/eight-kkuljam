@@ -183,6 +183,8 @@ const AddButton = styled.button`
 
 
 type outletProps = {
+  monthlyData: selectedDataType[];
+  setMonthlyData: (monthlyData: selectedDataType[]) => void;
   selectedData: selectedDataType;
   setSelectedData: (selectedData:selectedDataType) => void;
   paramsOfTotalStatePage: { year: number; month: number; };
@@ -191,14 +193,6 @@ type outletProps = {
 }
 
 const TotalStatePage = () => {
-  type monthlyDataType = {
-    id: number,
-    year: number,
-    month: number,
-    date: number,
-    hour: number,
-    minute: number
-  }
   type averageTimeType = {
     hour: number,
     minute: number,
@@ -215,8 +209,7 @@ const TotalStatePage = () => {
     3: (<span>끄앙 꿀쟘젤리 살려..<br />이렇게는 못 살아...<br />수면부족이야 우앵~</span>),
   });
 
-  const {selectedData, setSelectedData, paramsOfTotalStatePage, setParamsOfTotalStatePage, setOpenAddInsertModal} = useOutletContext<outletProps>();
-  const [monthlyData, setMonthlyData] = useState<monthlyDataType[]>([]);
+  const {monthlyData, setMonthlyData, selectedData, setSelectedData, paramsOfTotalStatePage, setParamsOfTotalStatePage, setOpenAddInsertModal} = useOutletContext<outletProps>();
   const [averageTime, setAverageTime] = useState<averageTimeType>({hour: 0, minute: 0, state: 0});
 
   useEffect(() => {
@@ -270,7 +263,7 @@ const TotalStatePage = () => {
         minute: Math.floor(newAverageTime%60),
         state: newState.current
       });
-      setMonthlyData(monthlyData.sort((a:monthlyDataType, b:monthlyDataType) => {return a.date - b.date}));
+      setMonthlyData(monthlyData.sort((a:selectedDataType, b:selectedDataType) => {return a.date - b.date}));
     }
   },[monthlyData]);
 

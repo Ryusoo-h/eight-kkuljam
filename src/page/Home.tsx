@@ -108,6 +108,8 @@ const Home = () => {
         minute: 0
     });
 
+    const [monthlyData, setMonthlyData] = useState<selectedDataType[]>([]);
+
     const didMount = useRef(false);
     useEffect(() => {
         if (!didMount.current) { // 첫 로딩시 날짜 업데이트 -> 오늘 데이터 가져오기
@@ -181,7 +183,7 @@ const Home = () => {
             
             <TotalStateWrapper>
                 <MonthlyWrapper className={openTotalStatePage ? "opened" : ""}>
-                    <Outlet context={{ selectedData, setSelectedData, paramsOfTotalStatePage, setParamsOfTotalStatePage, setOpenAddInsertModal }} />
+                    <Outlet context={{ monthlyData, setMonthlyData, selectedData, setSelectedData, paramsOfTotalStatePage, setParamsOfTotalStatePage, setOpenAddInsertModal }} />
                 </MonthlyWrapper>
                 {openTotalStatePage ? (
                     <TotalToggleButton className="basic-button opened" onClick={() => {setOpenTotalStatePage(false);  navigate('/');}}>수면시간 기록 닫아두기</TotalToggleButton>
