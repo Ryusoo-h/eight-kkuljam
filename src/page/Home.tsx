@@ -194,7 +194,7 @@ const Home = () => {
 
             {/* ↓↓모달 출력↓↓ */}
             <TodayStateInsertModal openModal={openTodayInsertModal} setOpenModal={setOpentodayInsertModal} todayData={todayData} setTodayData={setTodayData} initialHour={initialHour} />
-            <AddStateInsertModal openModal={openAddInsertModal} setOpenModal={setOpenAddInsertModal} selectedData={selectedData} setSelectedData={setSelectedData} />
+            <AddStateInsertModal openModal={openAddInsertModal} setOpenModal={setOpenAddInsertModal} selectedData={selectedData} setSelectedData={setSelectedData} monthlyData={monthlyData} setMonthlyData={setMonthlyData}/>
         </div>
     );
 }

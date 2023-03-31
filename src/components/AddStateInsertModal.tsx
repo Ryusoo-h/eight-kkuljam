@@ -9,6 +9,7 @@ import ko from 'date-fns/locale/ko';
 import postDayData from '../apis/postDayData';
 import putDayData from '../apis/putDayData';
 import getTheDayData, { isGettedResponseEmpty } from '../apis/getTheDayData';
+import YesOrNoModal from './YesOrNoModal';
 registerLocale('ko', ko);
 setDefaultLocale('ko');
 
@@ -121,8 +122,8 @@ const DatePickerWrapper = styled.div`
     .react-datepicker__month-text--keyboard-selected,
     .react-datepicker__quarter-text--keyboard-selected,
     .react-datepicker__year-text--keyboard-selected {
-        background-color: #c29fd7;
-        color: #fff;
+        background-color: #fff; // #c29fd7;
+        color: #000;
     }
 
     .react-datepicker__day--keyboard-selected:hover, 
@@ -196,11 +197,13 @@ const CloseButton = styled.button`
 
 type AddStateInsertModalType = {
     openModal: boolean;
-    setOpenModal: (isOpen:boolean)=>void;
+    setOpenModal: (isOpen:boolean) => void;
     selectedData: dateTimeStampType;
-    setSelectedData: (selectedData:dateTimeStampType)=>void;
+    setSelectedData: (selectedData:dateTimeStampType) => void;
+    monthlyData: dateTimeStampType[];
+    setMonthlyData: (monthlyData: dateTimeStampType[]) => void;
 }
-const AddStateInsertModal = ({openModal, setOpenModal, selectedData, setSelectedData}:AddStateInsertModalType) => {
+const AddStateInsertModal = ({openModal, setOpenModal, selectedData, setSelectedData, monthlyData, setMonthlyData}:AddStateInsertModalType) => {
     const Modal = useRef<any>(null);
 
     const [hour, setHour] = useState(8);
@@ -209,6 +212,8 @@ const AddStateInsertModal = ({openModal, setOpenModal, selectedData, setSelected
     const [startDate, setStartDate] = useState(new Date());
     const [hiddenDatePicker, setHiddenDatePicker] = useState<Boolean>(false);
 
+    const [openModifyModal, setOpenModifyModal] = useState<Boolean>(false);
+    const [isModify, setIsModify] = useState<Boolean>(false);
     useEffect(() => {
         setHour((selectedData.hour !== 0) ? selectedData.hour : hour);
         setMinute(selectedData.minute);
@@ -230,9 +235,41 @@ const AddStateInsertModal = ({openModal, setOpenModal, selectedData, setSelected
         const newData = isGettedResponseEmpty(theDayData)
             ? await postDayData(selectedData)
             : await putDayData({ ...theDayData[0], hour, minute });
-        
         if (!Array.isArray(newData)) {
-            setSelectedData(newData);
+            if (isModify) {
+                const newMonthlyData = monthlyData.map(data => data.id === newData.id ? newData : data);
+                console.log(newMonthlyData);
+                setMonthlyData(newMonthlyData);
+                console.log('modify monthlyData: ',monthlyData);
+            } else {
+                setMonthlyData([...monthlyData, newData]);
+                console.log('unmodify monthlyData: ',monthlyData);
+            }
+            setIsModify(false);
+            setSelectedData({
+                id: 0,
+                year: 0,
+                month: 0,
+                date: 0,
+                hour: 0,
+                minute: 0
+            });
+        }
+    }
+
+    const onSelectDatePicker = (date:Date) => {
+        // 날짜를 선택하면
+        // 그 날짜가 기존 데이터에 있는 지 확인
+        console.log('date :', date.getFullYear(), date.getMonth() + 1, date.getDate());
+        if (monthlyData.findIndex((data) => {
+            return data.year===date.getFullYear() && data.month===date.getMonth() + 1 && data.date===date.getDate()
+        }) >= 0) {
+            // 이미 저장되어있는 날짜일 경우
+            setOpenModifyModal(true);
+            setHiddenDatePicker(true);
+        } else {
+            // 없으면 원래하던대로 저장
+            setHiddenDatePicker(true);
         }
     }
 
@@ -246,7 +283,7 @@ const AddStateInsertModal = ({openModal, setOpenModal, selectedData, setSelected
                         <DatePicker selected={startDate}
                             locale="ko"
                             onChange={(date:Date) => setStartDate(date)}
-                            onSelect={()=>{setHiddenDatePicker(true)}} //when day is clicked
+                            onSelect={(date:Date)=>{onSelectDatePicker(date)}} //when day is clicked
                             // onChange={handleDateChange} //only when value has changed
                             renderCustomHeader={({ date, decreaseMonth, increaseMonth }) => {
                                     return (
@@ -269,12 +306,18 @@ const AddStateInsertModal = ({openModal, setOpenModal, selectedData, setSelected
                         addNewDataInMonthlyData({...selectedData, hour, minute});
                         setOpenModal(false);
                         setHiddenDatePicker(false);
+                        setStartDate(new Date());
                     }}>
                         기록 완료!
                     </CompleteButton>
-                    <CloseButton className="close" type="button" onClick={() => {setOpenModal(false); setHiddenDatePicker(false);}}>나중에 기록할래요</CloseButton>
+                    <CloseButton className="close" type="button" onClick={() => {setOpenModal(false); setHiddenDatePicker(false); setStartDate(new Date());}}>나중에 기록할래요</CloseButton>
                 </div>
             </div>
+            {openModifyModal
+                && <YesOrNoModal onClickYes={() => {setIsModify(true); setOpenModifyModal(false);}} onClickNo={() => {setOpenModifyModal(false); setStartDate(new Date());}}>
+                    <span>{startDate.getFullYear()}년 {startDate.getMonth() + 1}월 {startDate.getDate()}일은<br />이미 기록이 있습니다.<br />새로 수정하시겠습니까?</span>
+                </YesOrNoModal>
+            }
         </ModalWrapper>
     );
 }

@@ -267,20 +267,6 @@ const TotalStatePage = () => {
     }
   },[monthlyData]);
 
-  useEffect(() => {
-    if (selectedData.id !== 0) {
-      setMonthlyData([...monthlyData, selectedData]);
-      setSelectedData({
-        id: 0,
-        year: 0,
-        month: 0,
-        date: 0,
-        hour: 0,
-        minute: 0
-      });
-    }
-  }, [selectedData.id]);
-
   const onClickPrevMonthButton = () => {
     if ( paramsOfTotalStatePage.month === 1 ) {
       setParamsOfTotalStatePage({ year: --paramsOfTotalStatePage.year, month: 12 });
