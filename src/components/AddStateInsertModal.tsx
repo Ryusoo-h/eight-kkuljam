@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { selectedDataType } from '../types/dataType';
+import { dateTimeStampType } from '../types/dataType';
 import TimePicker from './TimePicker';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -197,8 +197,8 @@ const CloseButton = styled.button`
 type AddStateInsertModalType = {
     openModal: boolean;
     setOpenModal: (isOpen:boolean)=>void;
-    selectedData: selectedDataType;
-    setSelectedData: (selectedData:selectedDataType)=>void;
+    selectedData: dateTimeStampType;
+    setSelectedData: (selectedData:dateTimeStampType)=>void;
 }
 const AddStateInsertModal = ({openModal, setOpenModal, selectedData, setSelectedData}:AddStateInsertModalType) => {
     const Modal = useRef<any>(null);
@@ -223,7 +223,7 @@ const AddStateInsertModal = ({openModal, setOpenModal, selectedData, setSelected
         })
     },[startDate])
 
-    const addNewDataInMonthlyData = async (selectedData:selectedDataType) => {
+    const addNewDataInMonthlyData = async (selectedData:dateTimeStampType) => {
 
         const {year, month, date, hour, minute} = selectedData;
         const theDayData = await getTheDayData(year, month, date);

@@ -1,15 +1,15 @@
 
 import axios from "axios";
 import { LIST_URL } from "./url";
-import { selectedDataType } from "../types/dataType";
+import { dateTimeStampType } from "../types/dataType";
 
-const putDayData = async (selectedData:selectedDataType) => {
+const putDayData = async (selectedData:dateTimeStampType) => {
     const {id} = selectedData;
     const response = await axios.put(
         `${LIST_URL}/${id}`,
         selectedData
     ).then(response => {
-        const postedData:selectedDataType = response.data;
+        const postedData:dateTimeStampType = response.data;
         return postedData;
     }).catch(e => {
         console.log('✅postDayData API 에러 :', e);

@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-globals */
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { selectedDataType, stateType } from "../types/dataType";
+import { dateTimeStampType, stateType } from "../types/dataType";
 import { useOutletContext } from 'react-router-dom';
 import getMonthlyList from "../apis/getMonthlyList";
 
@@ -183,10 +183,10 @@ const AddButton = styled.button`
 
 
 type outletProps = {
-  monthlyData: selectedDataType[];
-  setMonthlyData: (monthlyData: selectedDataType[]) => void;
-  selectedData: selectedDataType;
-  setSelectedData: (selectedData:selectedDataType) => void;
+  monthlyData: dateTimeStampType[];
+  setMonthlyData: (monthlyData: dateTimeStampType[]) => void;
+  selectedData: dateTimeStampType;
+  setSelectedData: (selectedData:dateTimeStampType) => void;
   paramsOfTotalStatePage: { year: number; month: number; };
   setParamsOfTotalStatePage: (standardDate:{ year: number; month: number; }) => void;
   setOpenAddInsertModal: (isOpen:boolean)=>void;
@@ -263,7 +263,7 @@ const TotalStatePage = () => {
         minute: Math.floor(newAverageTime%60),
         state: newState.current
       });
-      setMonthlyData(monthlyData.sort((a:selectedDataType, b:selectedDataType) => {return a.date - b.date}));
+      setMonthlyData(monthlyData.sort((a:dateTimeStampType, b:dateTimeStampType) => {return a.date - b.date}));
     }
   },[monthlyData]);
 

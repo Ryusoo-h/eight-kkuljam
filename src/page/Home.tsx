@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import TodayState from '../components/TodayState';
 import TodayStateInsertModal from '../components/TodayStateInsertModal';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { selectedDataType, todayDataType } from '../types/dataType';
+import { dateTimeStampType, todayDataType } from '../types/dataType';
 import { Outlet, useNavigate } from 'react-router-dom';
 import AddStateInsertModal from '../components/AddStateInsertModal';
 import getTheDayData from '../apis/getTheDayData';
@@ -99,7 +99,7 @@ const Home = () => {
         state: 0
     });
 
-    const [selectedData, setSelectedData] = useState<selectedDataType>({
+    const [selectedData, setSelectedData] = useState<dateTimeStampType>({
         id: 0,
         year: 0,
         month: 0,
@@ -108,7 +108,7 @@ const Home = () => {
         minute: 0
     });
 
-    const [monthlyData, setMonthlyData] = useState<selectedDataType[]>([]);
+    const [monthlyData, setMonthlyData] = useState<dateTimeStampType[]>([]);
 
     const didMount = useRef(false);
     useEffect(() => {

@@ -14,7 +14,7 @@ export type todayDataType = {
     // 0 : 입력전 상태
 }
 
-export type selectedDataType = {
+export type dateTimeStampType = {
     id: number,
     year: number, 
     month: number, 
