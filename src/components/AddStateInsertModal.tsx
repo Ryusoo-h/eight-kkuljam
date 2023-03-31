@@ -216,7 +216,7 @@ const AddStateInsertModal = ({openModal, setOpenModal, selectedData, setSelected
     const [isModify, setIsModify] = useState<Boolean>(false);
     useEffect(() => {
         setHour((selectedData.hour !== 0) ? selectedData.hour : hour);
-        setMinute(selectedData.minute);
+        setMinute((selectedData.minute !== 0) ? selectedData.minute : minute);
     },[selectedData])
 
     useEffect(() => {
@@ -260,15 +260,20 @@ const AddStateInsertModal = ({openModal, setOpenModal, selectedData, setSelected
     const onSelectDatePicker = (date:Date) => {
         // 날짜를 선택하면
         // 그 날짜가 기존 데이터에 있는 지 확인
-        console.log('date :', date.getFullYear(), date.getMonth() + 1, date.getDate());
-        if (monthlyData.findIndex((data) => {
-            return data.year===date.getFullYear() && data.month===date.getMonth() + 1 && data.date===date.getDate()
-        }) >= 0) {
+        const sameDateData = monthlyData.find((data) => {
+                return data.year===date.getFullYear() && data.month===date.getMonth() + 1 && data.date===date.getDate()
+            });
+        if (sameDateData !== undefined) {
             // 이미 저장되어있는 날짜일 경우
+            console.log(sameDateData.hour, sameDateData.minute);
             setOpenModifyModal(true);
+            setHour(sameDateData.hour);
+            setMinute(sameDateData.minute);
         } else {
             // 없으면 원래하던대로 저장
             setHiddenDatePicker(true);
+            setHour(8);
+            setMinute(0);
         }
     }
 
