@@ -207,7 +207,7 @@ const AddStateInsertModal = ({openModal, setOpenModal, selectedData, setSelected
     const [minute, setMinute] = useState(0);
 
     const [startDate, setStartDate] = useState(new Date());
-    const [hiddneDatePicker, setHiddneDatePicker] = useState<Boolean>(false);
+    const [hiddenDatePicker, setHiddenDatePicker] = useState<Boolean>(false);
 
     useEffect(() => {
         setHour((selectedData.hour !== 0) ? selectedData.hour : hour);
@@ -238,15 +238,15 @@ const AddStateInsertModal = ({openModal, setOpenModal, selectedData, setSelected
 
     return (
         <ModalWrapper id="today-state-form-modal" className={openModal ? "" : "hidden"} ref={Modal}>
-            <div className="modal-dark-space" onClick={() => {setOpenModal(false); setHiddneDatePicker(false);}} />
+            <div className="modal-dark-space" onClick={() => {setOpenModal(false); setHiddenDatePicker(false);}} />
             <div className="modal-white-space">
                 <div className="content-wrapper">
-                    <DateBox className='date' onClick={() => {setHiddneDatePicker(false)}}>{selectedData.year}년 {selectedData.month}월 {selectedData.date}일</DateBox>
-                    <DatePickerWrapper className={hiddneDatePicker ? 'hidden' : ''}>
+                    <DateBox className='date' onClick={() => {setHiddenDatePicker(false)}}>{selectedData.year}년 {selectedData.month}월 {selectedData.date}일</DateBox>
+                    <DatePickerWrapper className={hiddenDatePicker ? 'hidden' : ''}>
                         <DatePicker selected={startDate}
                             locale="ko"
                             onChange={(date:Date) => setStartDate(date)}
-                            onSelect={()=>{setHiddneDatePicker(true)}} //when day is clicked
+                            onSelect={()=>{setHiddenDatePicker(true)}} //when day is clicked
                             // onChange={handleDateChange} //only when value has changed
                             renderCustomHeader={({ date, decreaseMonth, increaseMonth }) => {
                                     return (
@@ -268,11 +268,11 @@ const AddStateInsertModal = ({openModal, setOpenModal, selectedData, setSelected
                     <CompleteButton className="basic-button" type="button" onClick={()=>{
                         addNewDataInMonthlyData({...selectedData, hour, minute});
                         setOpenModal(false);
-                        setHiddneDatePicker(false);
+                        setHiddenDatePicker(false);
                     }}>
                         기록 완료!
                     </CompleteButton>
-                    <CloseButton className="close" type="button" onClick={() => {setOpenModal(false); setHiddneDatePicker(false);}}>나중에 기록할래요</CloseButton>
+                    <CloseButton className="close" type="button" onClick={() => {setOpenModal(false); setHiddenDatePicker(false);}}>나중에 기록할래요</CloseButton>
                 </div>
             </div>
         </ModalWrapper>
