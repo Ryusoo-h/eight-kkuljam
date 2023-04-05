@@ -4,6 +4,9 @@ import styled from "styled-components";
 import { dateTimeStampType, stateType } from "../types/dataType";
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import getMonthlyList from "../apis/getMonthlyList";
+import DailyData from "../components/DailyData";
+import YesOrNoModal from "../components/YesOrNoModal";
+import deleteDayData from "../apis/deleteDayData";
 
 const EachMonthAverage = styled.div`
   display: flex;
@@ -147,36 +150,6 @@ const MonthlyDataBox = styled.ul`
     border-radius: 3px;
   }
 `;
-const DailyData = styled.li`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-sizing: border-box;
-  width: calc(100% - 6px);
-  padding: 6px 0;
-  border-bottom: solid 1px #d9d9d9;
-  position: relative;
-  .date {
-    box-sizing: border-box;
-    width: 48px;
-    padding-right: 8px;
-    text-align: right;
-  }
-  .time {
-    padding: 0 8px;
-    flex-grow: 1;
-    text-align: right;
-  }
-  .button-wrapper {
-    position: absolute;
-    top: 50%;
-    right: 0;
-    transform: translateY(-50%);
-    &.hidden {
-      display: none;
-    }
-  }
-`;
 const AddButton = styled.button`
   margin: 8px auto 16px;
 `;
@@ -212,8 +185,9 @@ const TotalStatePage = () => {
   });
 
   const {monthlyData, setMonthlyData, selectedData, setSelectedData, paramsOfTotalStatePage, setParamsOfTotalStatePage, setOpenAddInsertModal} = useOutletContext<outletProps>();
+  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [averageTime, setAverageTime] = useState<averageTimeType>({hour: 0, minute: 0, state: 0});
-
+  const [toBeDeletedId, setToBeDeletedId] = useState<number>(0);
   useEffect(() => {
     // 서버에서 paramsOfTotalStatePage에 해당하는 월 데이터를 가져옴!
     const getServerMonthlyList = async() => {
@@ -284,6 +258,14 @@ const TotalStatePage = () => {
     navigate(`/totalState/${year}-${month}`);
   };
   
+  const removeDailyData = async(id:number) => {
+    const response = await deleteDayData(id);
+    if (response) {
+        const newMonthlyData = monthlyData.filter(list => list.id !== id);
+        setMonthlyData(newMonthlyData);
+    }
+  }
+
   return (
     <>
       <EachMonthAverage style={{backgroundColor: `var(--state${averageTime.state}-light)`}}>
@@ -311,21 +293,17 @@ const TotalStatePage = () => {
           <MonthlyDataBox>
             {monthlyData.map((data) => {
               return (
-                <DailyData key={data.id}>
-                  <span className="date">{data.date}일</span>
-                  <span className="time">{data.hour}시간 {data.minute ! === 0 ? "00분" : `${data.minute}분`}</span>
-                  <div className="button-wrapper hidden">
-                    <button>수정</button>
-                    <button>삭제</button>
-                  </div>
-                </DailyData>
+                <DailyData data={data} key={data.id} setToBeDeletedId={setToBeDeletedId} setOpenDeleteModal={setOpenDeleteModal} />
               )
             })}
           </MonthlyDataBox>
         </StateInfo>
       )}
       <AddButton className="basic-button" onClick={() => {setOpenAddInsertModal(true);}}>기록 추가하기</AddButton>
-      </>
+      { openDeleteModal &&
+        <YesOrNoModal onClickYes={() => {removeDailyData(toBeDeletedId); setOpenDeleteModal(false);}} onClickNo={() => {setOpenDeleteModal(false);}} ><span>정말 삭제하시겠습니까?</span></YesOrNoModal>
+      }
+    </>
   );
 }
 
