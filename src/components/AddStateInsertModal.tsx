@@ -253,7 +253,7 @@ const AddStateInsertModal = ({todayDate, todayData, setTodayData, openModal, set
             console.log(year, month, date, todayDate.current.getFullYear(), todayDate.current.getMonth(), todayDate.current.getDate())
             if (year === todayDate.current.getFullYear() && month === todayDate.current.getMonth() + 1 && date === todayDate.current.getDate()) {
                 console.log('갱신');
-                setTodayData({...todayData, ...selectedData});
+                setTodayData({...todayData, ...newData});
             }
             // 초기화
             setIsModify(false);
