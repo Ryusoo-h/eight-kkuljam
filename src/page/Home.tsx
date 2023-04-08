@@ -110,13 +110,13 @@ const Home = () => {
 
     const [monthlyData, setMonthlyData] = useState<dateTimeStampType[]>([]);
 
-    const didMount = useRef(false);
+    const didMount = useRef<Boolean>(false);
+    const todayDate = useRef<Date>(new Date());
     useEffect(() => {
         if (!didMount.current) { // 첫 로딩시 날짜 업데이트 -> 오늘 데이터 가져오기
-            const today = new Date();
-            const [year, month, date]:number[] = [today.getFullYear(), (today.getMonth() + 1), today.getDate()];
-            // const customId = `${year}-${String(month).padStart(2,"0")}-${String(date).padStart(2,"0")}`;
-            setParamsOfTotalStatePage({year: year, month: month});
+            todayDate.current = new Date();
+            const [year, month, date]:number[] = [todayDate.current.getFullYear(), (todayDate.current.getMonth() + 1), todayDate.current.getDate()];
+            setParamsOfTotalStatePage({year, month});
             // 서버에서 오늘 데이터 찾기
             const getServerTodayData = async (year:number, month:number, date:number) => {
                 const response = await getTheDayData( year, month, date );
@@ -129,7 +129,7 @@ const Home = () => {
             getServerTodayData(year, month, date);
             didMount.current = true;
         }
-        console.log('todayData 업데이트', todayData)
+        // console.log('todayData 업데이트', todayData);
     },[todayData])
 
     useEffect(()=> { 
@@ -183,7 +183,7 @@ const Home = () => {
             
             <TotalStateWrapper>
                 <MonthlyWrapper className={openTotalStatePage ? "opened" : ""}>
-                    <Outlet context={{ monthlyData, setMonthlyData, selectedData, setSelectedData, paramsOfTotalStatePage, setParamsOfTotalStatePage, setOpenAddInsertModal }} />
+                    <Outlet context={{ monthlyData, setMonthlyData, paramsOfTotalStatePage, setParamsOfTotalStatePage, setOpenAddInsertModal }} />
                 </MonthlyWrapper>
                 {openTotalStatePage ? (
                     <TotalToggleButton className="basic-button opened" onClick={() => {setOpenTotalStatePage(false);  navigate('/');}}>수면시간 기록 닫아두기</TotalToggleButton>
@@ -194,7 +194,7 @@ const Home = () => {
 
             {/* ↓↓모달 출력↓↓ */}
             <TodayStateInsertModal openModal={openTodayInsertModal} setOpenModal={setOpentodayInsertModal} todayData={todayData} setTodayData={setTodayData} initialHour={initialHour} />
-            <AddStateInsertModal openModal={openAddInsertModal} setOpenModal={setOpenAddInsertModal} selectedData={selectedData} setSelectedData={setSelectedData} monthlyData={monthlyData} setMonthlyData={setMonthlyData} paramsOfTotalStatePage={paramsOfTotalStatePage} />
+            <AddStateInsertModal todayDate={todayDate} todayData={todayData} setTodayData={setTodayData} openModal={openAddInsertModal} setOpenModal={setOpenAddInsertModal} selectedData={selectedData} setSelectedData={setSelectedData} monthlyData={monthlyData} setMonthlyData={setMonthlyData} paramsOfTotalStatePage={paramsOfTotalStatePage} />
         </div>
     );
 }

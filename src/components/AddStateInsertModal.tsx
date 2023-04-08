@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { MutableRefObject, Ref, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { dateTimeStampType } from '../types/dataType';
+import { dateTimeStampType, todayDataType } from '../types/dataType';
 import TimePicker from './TimePicker';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -196,6 +196,9 @@ const CloseButton = styled.button`
 `;
 
 type AddStateInsertModalType = {
+    todayDate: MutableRefObject<Date>;
+    todayData: todayDataType;
+    setTodayData: (todayData: todayDataType) => void;
     openModal: boolean;
     setOpenModal: (isOpen:boolean) => void;
     selectedData: dateTimeStampType;
@@ -204,7 +207,7 @@ type AddStateInsertModalType = {
     setMonthlyData: (monthlyData: dateTimeStampType[]) => void;
     paramsOfTotalStatePage: {year: number, month: number};
 }
-const AddStateInsertModal = ({openModal, setOpenModal, selectedData, setSelectedData, monthlyData, setMonthlyData, paramsOfTotalStatePage}:AddStateInsertModalType) => {
+const AddStateInsertModal = ({todayDate, todayData, setTodayData, openModal, setOpenModal, selectedData, setSelectedData, monthlyData, setMonthlyData, paramsOfTotalStatePage}:AddStateInsertModalType) => {
     const Modal = useRef<any>(null);
 
     const [hour, setHour] = useState(8);
@@ -230,7 +233,6 @@ const AddStateInsertModal = ({openModal, setOpenModal, selectedData, setSelected
     },[startDate])
 
     const addNewDataInMonthlyData = async (selectedData:dateTimeStampType) => {
-
         const {year, month, date, hour, minute} = selectedData;
         const theDayData = await getTheDayData(year, month, date);
         const newData = isGettedResponseEmpty(theDayData)
@@ -246,6 +248,14 @@ const AddStateInsertModal = ({openModal, setOpenModal, selectedData, setSelected
                 setMonthlyData([...monthlyData, newData]);
                 console.log('unmodify monthlyData: ',monthlyData);
             }
+            // 오늘데이터일 경우 오늘 데이터 갱신
+            todayDate.current = new Date();
+            console.log(year, month, date, todayDate.current.getFullYear(), todayDate.current.getMonth(), todayDate.current.getDate())
+            if (year === todayDate.current.getFullYear() && month === todayDate.current.getMonth() + 1 && date === todayDate.current.getDate()) {
+                console.log('갱신');
+                setTodayData({...todayData, ...selectedData});
+            }
+            // 초기화
             setIsModify(false);
             setSelectedData({
                 id: 0,
