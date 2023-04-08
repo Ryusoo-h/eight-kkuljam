@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-globals */
-import { useEffect, useRef, useState } from "react";
+import { MutableRefObject, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { dateTimeStampType, stateType } from "../types/dataType";
+import { dateTimeStampType, stateType, todayDataType } from "../types/dataType";
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import getMonthlyList from "../apis/getMonthlyList";
 import DailyData from "../components/DailyData";
@@ -156,6 +156,9 @@ const AddButton = styled.button`
 
 
 type outletProps = {
+  todayData: todayDataType;
+  setTodayData: (todayData:todayDataType) => void;
+  initialHour: MutableRefObject<number>;
   monthlyData: dateTimeStampType[];
   setMonthlyData: (monthlyData: dateTimeStampType[]) => void;
   selectedData: dateTimeStampType;
@@ -184,7 +187,7 @@ const TotalStatePage = () => {
     3: (<span>끄앙 꿀쟘젤리 살려..<br />이렇게는 못 살아...<br />수면부족이야 우앵~</span>),
   });
 
-  const {monthlyData, setMonthlyData, paramsOfTotalStatePage, setParamsOfTotalStatePage, setOpenAddInsertModal} = useOutletContext<outletProps>();
+  const {todayData, setTodayData, initialHour, monthlyData, setMonthlyData, paramsOfTotalStatePage, setParamsOfTotalStatePage, setOpenAddInsertModal} = useOutletContext<outletProps>();
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [averageTime, setAverageTime] = useState<averageTimeType>({hour: 0, minute: 0, state: 0});
   const [toBeDeletedId, setToBeDeletedId] = useState<number>(0);
@@ -263,6 +266,16 @@ const TotalStatePage = () => {
     if (response) {
         const newMonthlyData = monthlyData.filter(list => list.id !== id);
         setMonthlyData(newMonthlyData);
+        console.log(todayData.id, id);
+        if (todayData.id === id) {
+          setTodayData({ 
+            ...todayData,
+            id: 0,
+            hour: initialHour.current,
+            minute: 0,
+            state: 0
+        })
+        }
     }
   }
 
@@ -301,7 +314,12 @@ const TotalStatePage = () => {
       )}
       <AddButton className="basic-button" onClick={() => {setOpenAddInsertModal(true);}}>기록 추가하기</AddButton>
       { openDeleteModal &&
-        <YesOrNoModal onClickYes={() => {removeDailyData(toBeDeletedId); setOpenDeleteModal(false);}} onClickNo={() => {setOpenDeleteModal(false);}} ><span>정말 삭제하시겠습니까?</span></YesOrNoModal>
+        <YesOrNoModal 
+          onClickYes={() => {removeDailyData(toBeDeletedId); setOpenDeleteModal(false);}} 
+          onClickNo={() => {setOpenDeleteModal(false);}} 
+        >
+          <span>정말 삭제하시겠습니까?</span>
+        </YesOrNoModal>
       }
     </>
   );

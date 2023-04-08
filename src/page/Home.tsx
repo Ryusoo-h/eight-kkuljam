@@ -183,7 +183,7 @@ const Home = () => {
             
             <TotalStateWrapper>
                 <MonthlyWrapper className={openTotalStatePage ? "opened" : ""}>
-                    <Outlet context={{ monthlyData, setMonthlyData, paramsOfTotalStatePage, setParamsOfTotalStatePage, setOpenAddInsertModal }} />
+                    <Outlet context={{ todayData, setTodayData, initialHour, monthlyData, setMonthlyData, paramsOfTotalStatePage, setParamsOfTotalStatePage, setOpenAddInsertModal }} />
                 </MonthlyWrapper>
                 {openTotalStatePage ? (
                     <TotalToggleButton className="basic-button opened" onClick={() => {setOpenTotalStatePage(false);  navigate('/');}}>수면시간 기록 닫아두기</TotalToggleButton>
