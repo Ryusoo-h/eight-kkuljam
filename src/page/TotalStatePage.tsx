@@ -184,7 +184,7 @@ const TotalStatePage = () => {
     3: (<span>끄앙 꿀쟘젤리 살려..<br />이렇게는 못 살아...<br />수면부족이야 우앵~</span>),
   });
 
-  const {monthlyData, setMonthlyData, selectedData, setSelectedData, paramsOfTotalStatePage, setParamsOfTotalStatePage, setOpenAddInsertModal} = useOutletContext<outletProps>();
+  const {monthlyData, setMonthlyData, paramsOfTotalStatePage, setParamsOfTotalStatePage, setOpenAddInsertModal} = useOutletContext<outletProps>();
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [averageTime, setAverageTime] = useState<averageTimeType>({hour: 0, minute: 0, state: 0});
   const [toBeDeletedId, setToBeDeletedId] = useState<number>(0);
